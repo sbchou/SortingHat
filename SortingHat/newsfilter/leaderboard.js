@@ -11,7 +11,7 @@ if (Meteor.isClient) {
        // return Articles.find({type: { $exists: true }});
        // } 
        //else {
-        p = Articles.findOne({type: {$exists:false}});
+        p = Articles.findOne({type: {$exists:false}, body: {"$exists" : true, "$ne" : ""}});
         console.log(p)
         Session.set("selectedArticle", p._id);   
         return [ p ];
@@ -51,13 +51,13 @@ if (Meteor.isClient) {
       Session.set("showCompleted", event.target.checked);
     },
 
-    'click .person': function () {
-      Articles.update(Session.get("selectedArticle"), {$set: {type: "person"}});
+    'click .yes': function () {
+      Articles.update(Session.get("selectedArticle"), {$set: {type: "yes"}});
       location.reload();
     },
 
-    'click .org': function () {
-      Articles.update(Session.get("selectedArticle"), {$set: {type: "org"}});
+    'click .no': function () {
+      Articles.update(Session.get("selectedArticle"), {$set: {type: "no"}});
       location.reload();
     } 
   });

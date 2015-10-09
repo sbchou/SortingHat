@@ -32,6 +32,8 @@
       </div>
     </div>
 
+    <h1><center>Is this article about the election?</center></h1>
+
     <!--<label class="show-completed">
         <input type="checkbox" checked="{{showCompleted}}" />
         Show Annotated Tweets
@@ -40,16 +42,14 @@
   <ul class="leaderboard">
    {{#each articles}} 
       {{> article}}
+      
    {{/each}} 
   </ul>
  {{#if selectedName}}
     <div class="details"> 
       <!--<div class="name">{{selectedName}}</div> --> 
-      <button class="org">No</button>
-      <button class="person">Yes</button> 
- 
-
-
+      <button class="no">No</button>
+      <button class="yes">Yes</button> 
     </div>
   {{else}}
     <div class="message">Click a article to select</div>
@@ -57,14 +57,12 @@
 </template>
 
 <template name="article">
-  <ul class="article {{selected}}">
-    <!--<div class="name">{{selectedName}}</div>-->
+  <ul class="article {{selected}}">  
      
     <span class="name">{{title}}</span>
     <span class="description">{{body}}</span>
     <!--<span class="score">{{score}}</span>-->
-    <span class="score">{{type}}</span>
-    <span class="img"><img src={{picture}}></span>
+    <span class="score">{{type}}</span> 
 
   </ul>
 </template>
