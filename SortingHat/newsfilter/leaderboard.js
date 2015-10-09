@@ -1,47 +1,45 @@
-// Set up a collection to contain player information. On the server,
-// it is backed by a MongoDB collection named "players".
+// Set up a collection to contain article information. On the server,
+// it is backed by a MongoDB collection titled "articles".
 
-Players = new Mongo.Collection("players");
+Articles = new Mongo.Collection("articles");
 
 if (Meteor.isClient) { 
   Template.leaderboard.helpers({
-    players: function () {
-       if (Session.get("showCompleted")) {
+    articles: function () {
+       //if (Session.get("showCompleted")) {
         // If hide completed is checked, filter tasks 
-        return Players.find({type: { $exists: true }});
-        } 
-       else {
-        p = Players.findOne({type: {$exists:false}});
-        Session.set("selectedPlayer", p._id);
-        var url = p.picture;
-        url = url.replace("_normal", "");
-        p.picture = url;
+       // return Articles.find({type: { $exists: true }});
+       // } 
+       //else {
+        p = Articles.findOne({type: {$exists:false}});
+        console.log(p)
+        Session.set("selectedArticle", p._id);   
         return [ p ];
         // Otherwise, return all of the tasks
-        //return Players.find({});
-      }
+        //return Articles.find({});
+      //}
     },
     showCompleted: function () {
       return Session.get("showCompleted");
     },
     incompleteCount: function () {
-        return Players.find({ type: { $exists: false }}).count();
+        return Articles.find({ type: { $exists: false }}).count();
     },
     completeCount: function (){
-        return Players.find({type: {$exists: true}}).count();
+        return Articles.find({type: {$exists: true}}).count();
     },
     totalCount: function(){
-        return Players.find({}).count();
+        return Articles.find({}).count();
     },
     percentage: function(){
-      var completed = Players.find({type: {$exists: true}}).count();
-      var total = Players.find({}).count();
+      var completed = Articles.find({type: {$exists: true}}).count();
+      var total = Articles.find({}).count();
       return Math.round(( completed / total ) * 100);
     },
     selectedName: function () {
-      var player = Players.findOne(Session.get("selectedPlayer"));
+      var article = Articles.findOne(Session.get("selectedArticle"));
  
-      return player && player.name;
+      return article && article.title;
     }
 
   });
@@ -54,24 +52,19 @@ if (Meteor.isClient) {
     },
 
     'click .person': function () {
-      Players.update(Session.get("selectedPlayer"), {$set: {type: "person"}});
+      Articles.update(Session.get("selectedArticle"), {$set: {type: "person"}});
       location.reload();
     },
 
     'click .org': function () {
-      Players.update(Session.get("selectedPlayer"), {$set: {type: "org"}});
+      Articles.update(Session.get("selectedArticle"), {$set: {type: "org"}});
       location.reload();
-    },
-
-    'click .unsure': function () {
-      Players.update(Session.get("selectedPlayer"), {$set: {type: "unsure"}});
-      location.reload();
-    }
+    } 
   });
 
-  Template.player.helpers({
+  Template.article.helpers({
     selected: function () {
-      return Session.equals("selectedPlayer", this._id) ? "selected" : '';
+      return Session.equals("selectedArticle", this._id) ? "selected" : '';
     }
   });
 
@@ -87,7 +80,7 @@ if (Meteor.isClient) {
             var all = $.csv.toObjects(text);
             //console.log(all)
             _.each(all, function (entry) {
-              Players.insert(entry);
+              Articles.insert(entry);
             });
           }
           reader.readAsText(file);
@@ -98,7 +91,7 @@ if (Meteor.isClient) {
 
   Template.upload.helpers({
     noEntries: function () {
-       if ((Players.find().count() === 0) || (Players.find({type: {$exists: false}}).count() === 0)) {
+       if ((Articles.find().count() === 0) || (Articles.find({type: {$exists: false}}).count() === 0)) {
         // If hide completed is checked, filter tasks 
           return true;
         }  
@@ -110,9 +103,9 @@ if (Meteor.isClient) {
  }
 
 
-// On server startup, create some players if the database is empty.
+// On server startup, create some articles if the database is empty.
 if (Meteor.isServer) {
-    //if (Players.find().count() === 0){
+    //if (Articles.find().count() === 0){
     //  Session.set("noEntries", true);
     //} 
 }

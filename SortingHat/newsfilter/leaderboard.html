@@ -1,23 +1,7 @@
 <head>
   <title>Sorting Hat</title>
   <meta name="viewport" content="width=device-width, user-scalable=no">
-  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
-  <script>window.twttr = (function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0],
-    t = window.twttr || {};
-  if (d.getElementById(id)) return t;
-  js = d.createElement(s);
-  js.id = id;
-  js.src = "https://platform.twitter.com/widgets.js";
-  fjs.parentNode.insertBefore(js, fjs);
- 
-  t._e = [];
-  t.ready = function(f) {
-    t._e.push(f);
-  };
- 
-  return t;
-}(document, "script", "twitter-wjs"));</script>
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'> 
 </head>
 
 <body>
@@ -54,53 +38,30 @@
     </label>-->
     
   <ul class="leaderboard">
-   {{#each players}} 
-      {{> player}}
+   {{#each articles}} 
+      {{> article}}
    {{/each}} 
   </ul>
  {{#if selectedName}}
     <div class="details"> 
       <!--<div class="name">{{selectedName}}</div> --> 
-      <button class="org">Org</button>
-      <button class="person">Person</button>
-      <button class="unsure">?</button>
-      <div id ='timeline'></div>
-      <!--<a class="twitter-timeline" href="https://twitter.com/mpetitchou" data-widget-id="631684275625029632" data-screen-name={{selectedName}}>Tweets by @mpetitchou</a>-->
-
-      <script> 
-      twttr.ready(
-
-        function (twttr) {
-          twttr.widgets.createTimeline(
-          '631684275625029632',
-
-            document.getElementById('timeline'),
-            {
-              width: '450',
-              height: '700',
-              screenName: "{{selectedName}}",
-              //userId also works!
-            }).then(function (el) {
-              console.log("Embedded a timeline.")
-            });
-        }
-      );
-      /*!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");*/
-      </script>
+      <button class="org">No</button>
+      <button class="person">Yes</button> 
+ 
 
 
     </div>
   {{else}}
-    <div class="message">Click a player to select</div>
+    <div class="message">Click a article to select</div>
   {{/if}}
 </template>
 
-<template name="player">
-  <ul class="player {{selected}}">
+<template name="article">
+  <ul class="article {{selected}}">
     <!--<div class="name">{{selectedName}}</div>-->
      
-    <span class="name">@{{name}}</span>
-    <span class="description">{{description}}</span>
+    <span class="name">{{title}}</span>
+    <span class="description">{{body}}</span>
     <!--<span class="score">{{score}}</span>-->
     <span class="score">{{type}}</span>
     <span class="img"><img src={{picture}}></span>

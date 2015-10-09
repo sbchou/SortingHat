@@ -45,13 +45,13 @@ body {
 
 .leaderboard {
   border-top: 1px solid #f1f1f1;
-  counter-reset: ol-counter;
+  /*counter-reset: ol-counter;*/
   list-style-type: none;
   margin: 0 0 1.5em;
   padding: 0;
 }
 
-.player {
+.article {
   border-bottom: 1px solid #f1f1f1;
   cursor: pointer;
   padding: .5em 0;
@@ -61,10 +61,10 @@ body {
   border-left: 4px solid white;
 }
 
-.player:before {
+.article:before {
   color: #999;
-  content: counter(ol-counter);
-  counter-increment: ol-counter;
+  /*content: counter(ol-counter);
+  counter-increment: ol-counter;*/
   display: inline-block;
   font-weight: 300;
   line-height: 3em;
@@ -73,20 +73,20 @@ body {
   width: 3em;
 }
 
-.player .avatar {
+.article .avatar {
   display: inline-block;
   margin-right: 1em;
   vertical-align: middle;
 }
 
-.player .name {
+.article .name {
   display: inline-block;
   font-size: 1.25em;
   font-weight: 300;
   vertical-align: middle;
 } 
 
-.player .description { 
+.article .description { 
   display: inline-block;
   font-size: 1.25em;
   font-weight: 300;
@@ -94,7 +94,7 @@ body {
   padding: 10px;
 } 
 
-.player .img { 
+.article .img { 
   display: inline-block;
   font-size: 1.25em;
   font-weight: 300;
@@ -103,13 +103,13 @@ body {
 } 
 
 
-.player.selected {
+.article.selected {
   background-color: #fefff4;
   border-left: #4099FF 4px solid; 
   /*float: left;*/
 }
 
-.player:hover {
+.article:hover {
   background-color: #fefff4;
 }
 
@@ -253,11 +253,11 @@ body {
     margin: 2em 0 4em 0;
   }
 
-  .player:hover {
+  .article:hover {
     background-color: inherit;
   }
 
-  .player.selected:hover {
+  .article.selected:hover {
     background-color: #fefff4;
   }
 }
