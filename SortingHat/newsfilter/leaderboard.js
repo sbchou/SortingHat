@@ -45,6 +45,22 @@ if (Meteor.isClient) {
       var article = Articles.findOne(Session.get("selectedArticle"));
  
       return article && article.title;
+    },
+    allDone: function () {
+      if (Articles.find({type: {$exists:false}}).count() === 0) {
+      // If hide completed is checked, filter tasks 
+      return true;
+      }  
+     else{
+      return false;
+     }
+    },
+    
+    numTrue: function(){
+      return Articles.find({type: 'yes'}).count(); 
+    },
+    numFalse: function () {
+      return Articles.find({type: 'no'}).count();       
     }
 
   });
@@ -96,7 +112,7 @@ if (Meteor.isClient) {
 
   Template.upload.helpers({
     noEntries: function () {
-       if ((Articles.find().count() === 0) || (Articles.find({type: {$exists: false}}).count() === 0)) {
+       if ((Articles.find().count() === 0)) {
         // If hide completed is checked, filter tasks 
           return true;
         }  
@@ -105,8 +121,12 @@ if (Meteor.isClient) {
        }
       }
     });
+
+
+   
  }
 
+//return Articles.find({type: {$exists: true}}).count();
 
 // On server startup, create some articles if the database is empty.
 if (Meteor.isServer) {

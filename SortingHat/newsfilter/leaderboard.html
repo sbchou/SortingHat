@@ -10,7 +10,7 @@
     <h1 class="title">SORTING HAT</h1>
 
     <!--{{> upload}}-->
-    {{> leaderboard}}
+    {{> leaderboard}} 
   </div>
 </body>
 
@@ -22,9 +22,11 @@
     <output id="list"></output> 
   {{/if}}
 </template>
+ 
 
 <template name="leaderboard">
      <!--<div class="subtitle">({{completeCount}}) done &amp; ({{incompleteCount}}) left</div> -->
+ 
     <div class="progress">
         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{completeCount}}
         aria-valuemin="0" aria-valuemax="100" style="width:{{percent_complete}}%">
@@ -37,30 +39,45 @@
       </div>  
  
     </div>
+    
+    {{#if allDone}}
+        <center>
+        <h1>You're all done!</h1>
+        
+        <h2>
+        <p>Thanks for playing.</p>
 
+        <p>You classified {{numTrue}} articles as U.S. Election related, and {{numFalse}} articles as unrelated.</p>
 
+        </h2>
 
-    <h1><center>Is this article about the election?</center></h1>
+        </center>
+    {{else}}
+
+      <h1><center>Is this article about the election?</center></h1>
 
     <!--<label class="show-completed">
         <input type="checkbox" checked="{{showCompleted}}" />
         Show Annotated Tweets
     </label>-->
     
-  <ul class="leaderboard">
-   {{#each articles}} 
-      {{> article}}
+      <ul class="leaderboard">
+       {{#each articles}} 
+          {{> article}}
 
-   {{/each}} 
-  </ul>
- {{#if selectedName}}
-    <div class="details"> 
-      <!--<div class="name">{{selectedName}}</div> --> 
-      <button class="no">No</button>
-      <button class="yes">Yes</button> 
-    </div>
-  {{else}}
-    <div class="message">Click a article to select</div>
+       {{/each}} 
+      </ul>
+      {{#if selectedName}}
+        <div class="details"> 
+          <!--<div class="name">{{selectedName}}</div> --> 
+          <button class="no">No</button>
+          <button class="yes">Yes</button> 
+        </div>
+      <!--
+      {{else}}
+        <div class="message">Click a article to select</div>
+      -->
+      {{/if}}
   {{/if}}
 </template>
 
