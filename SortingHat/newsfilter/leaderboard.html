@@ -9,7 +9,7 @@
     <div class="logo"></div>
     <h1 class="title">SORTING HAT</h1>
 
-    {{> upload}}
+    <!--{{> upload}}-->
     {{> leaderboard}}
   </div>
 </body>
@@ -24,13 +24,21 @@
 </template>
 
 <template name="leaderboard">
-    <!--<div class="subtitle">({{completeCount}}) done &amp; ({{incompleteCount}}) left</div>-->
+     <!--<div class="subtitle">({{completeCount}}) done &amp; ({{incompleteCount}}) left</div> -->
     <div class="progress">
+        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{completeCount}}
+        aria-valuemin="0" aria-valuemax="100" style="width:{{percent_complete}}%">
+        <span class>{{completeCount}}</span>
+      </div>  
+
       <div class="progress-bar" role="progressbar" aria-valuenow={{completeCount}}
-      aria-valuemin="0" aria-valuemax="100" style="width:{{percentage}}%">
-      <span class="sr-only">{{percentage}}%</span>
-      </div>
+        aria-valuemin="0" aria-valuemax="100" style="width:{{percent_remain}}%">
+        <span class>{{incompleteCount}}</span>
+      </div>  
+ 
     </div>
+
+
 
     <h1><center>Is this article about the election?</center></h1>
 
@@ -42,7 +50,7 @@
   <ul class="leaderboard">
    {{#each articles}} 
       {{> article}}
-      
+
    {{/each}} 
   </ul>
  {{#if selectedName}}

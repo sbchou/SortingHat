@@ -31,10 +31,15 @@ if (Meteor.isClient) {
     totalCount: function(){
         return Articles.find({}).count();
     },
-    percentage: function(){
+    percent_complete: function(){
       var completed = Articles.find({type: {$exists: true}}).count();
       var total = Articles.find({}).count();
       return Math.round(( completed / total ) * 100);
+    },
+    percent_remain: function(){
+      var incompleted = Articles.find({type: {$exists: false}}).count();
+      var total = Articles.find({}).count();
+      return Math.round(( incompleted / total ) * 100);
     },
     selectedName: function () {
       var article = Articles.findOne(Session.get("selectedArticle"));
