@@ -4,7 +4,13 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+ 
+#login-buttons .login-display-name {
+  font-family:  'Source Sans Pro';
+  font-size: 18px;
+  text-align: center;
 
+}
 
 body {
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -97,7 +103,8 @@ body {
   font-family:'Droid Serif';
 } 
 
-.article .description { 
+.article .description {
+  white-space: pre-wrap; /* preserve them whitespacies!!!*/
   display: inline-block;
   font-size: 1.25em;
   font-weight: 300;

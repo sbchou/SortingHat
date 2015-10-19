@@ -6,19 +6,22 @@ Articles = new Mongo.Collection("articles");
 if (Meteor.isClient) { 
   Template.leaderboard.helpers({
     articles: function () {
-       //if (Session.get("showCompleted")) {
-        // If hide completed is checked, filter tasks 
-       // return Articles.find({type: { $exists: true }});
-       // } 
-       //else {
-        p = Articles.findOne({type: {$exists:false}, body: {"$exists" : true, "$ne" : ""}});
-        console.log(p)
-        Session.set("selectedArticle", p._id);   
-        return [ p ];
-        // Otherwise, return all of the tasks
-        //return Articles.find({});
-      //}
+      var currentUserId = Meteor.userId();
+      p = Articles.findOne({type: {$exists:false}, 
+                body: {"$exists" : true, "$ne" : ""}});
+      console.log(p)
+      Session.set("selectedArticle", p._id);   
+      return [ p ];
+
     },
+
+    /*
+    'player': function(){
+      var currentUserId = Meteor.userId();
+      return PlayersList.find({createdBy: currentUserId},
+                              {sort: {score: -1, name: 1}});
+    },
+    */
     showCompleted: function () {
       return Session.get("showCompleted");
     },
@@ -61,6 +64,9 @@ if (Meteor.isClient) {
     },
     numFalse: function () {
       return Articles.find({type: 'no'}).count();       
+    },
+    results: function(){
+      return Articles.find({})
     }
 
   });
@@ -76,9 +82,11 @@ if (Meteor.isClient) {
       Articles.update(Session.get("selectedArticle"), {$set: {type: "yes"}});
       location.reload();
     },
+ 
 
     'click .no': function () {
-      Articles.update(Session.get("selectedArticle"), {$set: {type: "no"}});
+      Articles.update(Session.get("selectedArticle"), 
+       {$push: {'labels': {id: 5, name: 'item5'}}});
       location.reload();
     } 
   });
@@ -96,11 +104,10 @@ if (Meteor.isClient) {
         if (file.type.indexOf("text") == 0) {
           var reader = new FileReader();
           reader.onloadend = function (e) {
-            var text = e.target.result;
-            console.log(text)
-            var all = $.csv.toObjects(text);
-            //console.log(all)
+            var text = e.target.result;  
+            var all = $.csv.toObjects(text);  
             _.each(all, function (entry) {
+              entry.labels = [];
               Articles.insert(entry);
             });
           }
@@ -120,9 +127,7 @@ if (Meteor.isClient) {
         return false;
        }
       }
-    });
-
-
+    }); 
    
  }
 
