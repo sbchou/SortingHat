@@ -1,5 +1,5 @@
 <head>
-  <title>SortiNg hat</title>
+  <title>Sorting hat</title>
   <meta name="viewport" content="width=device-width, user-scalable=no">
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'> 
 </head>
@@ -63,6 +63,12 @@
 
             <p>You classified {{numTrue}} articles as U.S. Election related, and {{numFalse}} articles as unrelated.</p>
 
+             {{#each results}}
+              {{> result}}
+            {{/each}}
+
+
+            
             </h2>
 
           </center>
@@ -81,6 +87,17 @@
         -->
         {{/if}}
       {{/if}} 
+</template>
+
+<template name="result">
+  <ul class="article {{selected}}">  
+    <span class="name">{{title}}</span>  
+
+    <span class="description">Your guess: {{#each labels}} {{this.label}} {{/each}}</span> 
+    <span class="description">Machine guess: {{confidence}}% Yes </span>   
+     
+
+  </ul>
 </template>
 
 <template name="article">

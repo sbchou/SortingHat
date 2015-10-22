@@ -7,6 +7,7 @@ if (Meteor.isClient) {
   Meteor.subscribe('theArticles');
 
   Template.leaderboard.helpers({
+
     articles: function () {
       var currentUserId = Meteor.userId(); 
       // objects we haven't labeled yet. does this work?
@@ -17,11 +18,8 @@ if (Meteor.isClient) {
         allDone = true;
         return [];
       }
-      else{
-        p.confidence = Math.floor(parseFloat(p.election_news_confidence) * 100);
-      
+      else{      
         Session.set("selectedArticle", p._id);   
-        console.log(p)
         return [ p ];
       }
     },
@@ -61,13 +59,17 @@ if (Meteor.isClient) {
     },
     
     numTrue: function(){
-      return Articles.find({'labels.userid':Meteor.userId(), 'labels.label':1}).count();
+      return Articles.find({'labels.userid':Meteor.userId(), 'labels.label':'Yes'}).count();
     },
     numFalse: function(){
-      return Articles.find({'labels.userid':Meteor.userId(), 'labels.label':0}).count();
+      return Articles.find({'labels.userid':Meteor.userId(), 'labels.label':'No'}).count();
     },
+
     results: function(){
-      return Articles.find({'labels.userid':Meteor.userId()});
+      console.log(Articles.findOne({'labels.userid':Meteor.userId()}, {title:1}));
+      return Articles.find({'labels.userid':Meteor.userId()}, 
+        {fields : {'title':1, 'labels':1, 'confidence':1}});
+
     }
 
   });
@@ -77,14 +79,14 @@ if (Meteor.isClient) {
 
     'click .yes': function () {
       Articles.update(Session.get("selectedArticle"),
-       {$push: {'labels': {userid: Meteor.userId(), username: Meteor.user().profile['name'], label: 1}}});
+       {$push: {'labels': {userid: Meteor.userId(), username: Meteor.user().profile['name'], label: 'Yes'}}});
       location.reload();
     },
  
 
     'click .no': function () {
       Articles.update(Session.get("selectedArticle"), 
-       {$push: {'labels': {userid: Meteor.userId(), username: Meteor.user().profile['name'], label: 0}}});
+       {$push: {'labels': {userid: Meteor.userId(), username: Meteor.user().profile['name'], label: 'No'}}});
       location.reload();
     } 
   });
@@ -105,7 +107,8 @@ if (Meteor.isClient) {
             var text = e.target.result;  
             var all = $.csv.toObjects(text);  
             _.each(all, function (entry) {
-              entry.labels = [];
+              entry.labels = []; // add labels array
+              entry.confidence = Math.floor(parseFloat(entry.election_news_confidence) * 100);
               Articles.insert(entry);
             });
           }
@@ -117,7 +120,7 @@ if (Meteor.isClient) {
 
   Template.upload.helpers({
     noEntries: function () {
-       if ((Articles.find().count() === 0)) {
+       if ((Articles.find().count() === 0) && Meteor.user().profile['name'] === 'Sophie Chou') {
         // If hide completed is checked, filter tasks 
           return true;
         }  
