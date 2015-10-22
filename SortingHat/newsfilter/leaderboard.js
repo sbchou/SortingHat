@@ -8,11 +8,20 @@ if (Meteor.isClient) {
     articles: function () {
       var currentUserId = Meteor.userId(); 
       // objects we haven't labeled yet. does this work?
+      //IF NO MORE LEFT
       p = Articles.findOne({'body':{$ne:''}, 'labels.userid':{$ne:currentUserId}});
-      Session.set("selectedArticle", p._id);   
-      console.log(p)
-      return [ p ];
-
+      if(typeof p === 'undefined'){
+        console.log('NO MORE ARTICLES');
+        allDone = true;
+        return [];
+      }
+      else{
+        p.confidence = Math.floor(parseFloat(p.election_news_confidence) * 100);
+      
+        Session.set("selectedArticle", p._id);   
+        console.log(p)
+        return [ p ];
+      }
     },
 
     /*
@@ -31,7 +40,7 @@ if (Meteor.isClient) {
     completeCount: function (){
         return Articles.find({'labels.userid': Meteor.userId()}).count()    },
     totalCount: function(){
-        return Articles.find({}).count();
+        return Articles.find({'body':{$ne:''}}).count();
     },
     percent_complete: function(){
       var completed = Articles.find({'labels.userid': Meteor.userId()}).count();
@@ -48,15 +57,6 @@ if (Meteor.isClient) {
  
       return article && article.title;
     },
-    allDone: function () {
-      if (Articles.find({'labels.userid':{$ne : Meteor.userId()}}).count() === 0) {
-      // If hide completed is checked, filter tasks 
-      return true;
-      }  
-     else{
-      return false;
-     }
-    },
     
     numTrue: function(){
       return Articles.find({'labels.userid':Meteor.userId(), 'labels.label':1}).count();
@@ -65,7 +65,7 @@ if (Meteor.isClient) {
       return Articles.find({'labels.userid':Meteor.userId(), 'labels.label':0}).count();
     },
     results: function(){
-      return Articles.find({});
+      return Articles.find({'labels.userid':Meteor.userId()});
     }
 
   });
