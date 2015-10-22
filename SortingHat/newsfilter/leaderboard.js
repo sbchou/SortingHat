@@ -4,6 +4,8 @@
 Articles = new Mongo.Collection("articles");
 
 if (Meteor.isClient) { 
+  Meteor.subscribe('theArticles');
+
   Template.leaderboard.helpers({
     articles: function () {
       var currentUserId = Meteor.userId(); 
@@ -131,6 +133,11 @@ if (Meteor.isClient) {
 
 // On server startup, create some articles if the database is empty.
 if (Meteor.isServer) {
+
+    Meteor.publish('theArticles', function(){
+      var currentUserId = this.userId;
+      return Articles.find({});
+    });
     //if (Articles.find().count() === 0){
     //  Session.set("noEntries", true);
     //} 
