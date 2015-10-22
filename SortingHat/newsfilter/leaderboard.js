@@ -35,7 +35,7 @@ if (Meteor.isClient) {
       return Session.get("showCompleted");
     },
     incompleteCount: function () {
-        return Articles.find({'labels.userid':{$ne : Meteor.userId()}}).count();
+        return Articles.find({'labels.userid':{$ne : Meteor.userId()}, body:{$ne:''}}).count();
     },
     completeCount: function (){
         return Articles.find({'labels.userid': Meteor.userId()}).count()    },
@@ -44,11 +44,11 @@ if (Meteor.isClient) {
     },
     percent_complete: function(){
       var completed = Articles.find({'labels.userid': Meteor.userId()}).count();
-      var total = Articles.find({}).count();
+      var total = Articles.find({'body':{$ne:''}}).count();
       return Math.round(( completed / total ) * 100);
     },
     percent_remain: function(){
-      var incompleted = Articles.find({'labels.userid':{$ne : Meteor.userId()}}).count();
+      var incompleted = Articles.find({'labels.userid':{$ne : Meteor.userId()}, body:{$ne:''}}).count();
       var total = Articles.find({}).count();
       return Math.round(( incompleted / total ) * 100);
     },
