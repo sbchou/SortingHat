@@ -6,11 +6,11 @@ Articles = new Mongo.Collection("articles");
 if (Meteor.isClient) { 
   Template.leaderboard.helpers({
     articles: function () {
-      var currentUserId = Meteor.userId();
-      p = Articles.findOne({type: {$exists:false}, 
-                body: {"$exists" : true, "$ne" : ""}});
-      console.log(p)
+      var currentUserId = Meteor.userId(); 
+      // objects we haven't labeled yet. does this work?
+      p = Articles.findOne({'body':{$ne:''}, 'labels.userid':{$ne:currentUserId}});
       Session.set("selectedArticle", p._id);   
+      console.log(p)
       return [ p ];
 
     },
@@ -26,21 +26,20 @@ if (Meteor.isClient) {
       return Session.get("showCompleted");
     },
     incompleteCount: function () {
-        return Articles.find({ type: { $exists: false }}).count();
+        return Articles.find({'labels.userid':{$ne : Meteor.userId()}}).count();
     },
     completeCount: function (){
-        return Articles.find({type: {$exists: true}}).count();
-    },
+        return Articles.find({'labels.userid': Meteor.userId()}).count()    },
     totalCount: function(){
         return Articles.find({}).count();
     },
     percent_complete: function(){
-      var completed = Articles.find({type: {$exists: true}}).count();
+      var completed = Articles.find({'labels.userid': Meteor.userId()}).count();
       var total = Articles.find({}).count();
       return Math.round(( completed / total ) * 100);
     },
     percent_remain: function(){
-      var incompleted = Articles.find({type: {$exists: false}}).count();
+      var incompleted = Articles.find({'labels.userid':{$ne : Meteor.userId()}}).count();
       var total = Articles.find({}).count();
       return Math.round(( incompleted / total ) * 100);
     },
@@ -50,7 +49,7 @@ if (Meteor.isClient) {
       return article && article.title;
     },
     allDone: function () {
-      if (Articles.find({type: {$exists:false}}).count() === 0) {
+      if (Articles.find({'labels.userid':{$ne : Meteor.userId()}}).count() === 0) {
       // If hide completed is checked, filter tasks 
       return true;
       }  
@@ -60,13 +59,13 @@ if (Meteor.isClient) {
     },
     
     numTrue: function(){
-      return Articles.find({type: 'yes'}).count(); 
+      return Articles.find({'labels.userid':Meteor.userId(), 'labels.label':1}).count();
     },
-    numFalse: function () {
-      return Articles.find({type: 'no'}).count();       
+    numFalse: function(){
+      return Articles.find({'labels.userid':Meteor.userId(), 'labels.label':0}).count();
     },
     results: function(){
-      return Articles.find({})
+      return Articles.find({});
     }
 
   });
@@ -74,12 +73,9 @@ if (Meteor.isClient) {
 
   Template.leaderboard.events({
 
-    "change .show-completed input": function (event) {
-      Session.set("showCompleted", event.target.checked);
-    },
-
     'click .yes': function () {
-      Articles.update(Session.get("selectedArticle"), {$set: {type: "yes"}});
+      Articles.update(Session.get("selectedArticle"),
+       {$push: {'labels': {userid: Meteor.userId(), username: Meteor.user().profile['name'], label: 1}}});
       location.reload();
     },
  
