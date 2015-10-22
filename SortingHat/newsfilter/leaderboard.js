@@ -86,7 +86,7 @@ if (Meteor.isClient) {
 
     'click .no': function () {
       Articles.update(Session.get("selectedArticle"), 
-       {$push: {'labels': {id: 5, name: 'item5'}}});
+       {$push: {'labels': {userid: Meteor.userId(), username: Meteor.user().profile['name'], label: 0}}});
       location.reload();
     } 
   });

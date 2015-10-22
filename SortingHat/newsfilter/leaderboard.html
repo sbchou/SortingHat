@@ -1,5 +1,5 @@
 <head>
-  <title>Data Trainer</title>
+  <title>SortiNg hat</title>
   <meta name="viewport" content="width=device-width, user-scalable=no">
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'> 
 </head>
@@ -11,7 +11,7 @@
     {{> loginButtons}}
 
     <div class="logo"></div>
-    <h1 class="title">DATA COACH</h1>
+    <h1 class="title">SORTING HAT</h1>
  
     {{> upload}} 
     {{> leaderboard}}  
@@ -38,11 +38,12 @@
         <span class>{{completeCount}}</span>
       </div>  
 
+      <!--
       <div class="progress-bar" role="progressbar" aria-valuenow={{completeCount}}
         aria-valuemin="0" aria-valuemax="100" style="width:{{percent_remain}}%">
         <span class>{{incompleteCount}}</span>
       </div>  
- 
+      -->
     </div> 
       {{#if allDone}}
           <center>
@@ -85,10 +86,11 @@
 <template name="article">
   <ul class="article {{selected}}">  
      
+    <span class="score">{{r}}</span>  
     <span class="name">{{title}}</span>
     <span class="description">{{body}}</span>
     <!--<span class="score">{{score}}</span>-->
-    <span class="score">{{type}}</span>  
+    <span class="score">{{type}}</span>   
 
   </ul>
 </template>
