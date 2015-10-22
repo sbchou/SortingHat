@@ -80,14 +80,14 @@ if (Meteor.isClient) {
     'click .yes': function () {
       Articles.update(Session.get("selectedArticle"),
        {$push: {'labels': {userid: Meteor.userId(), username: Meteor.user().profile['name'], label: 'Yes'}}});
-      location.reload();
+        $("#leaderboard").load(location.href + " #leaderboard");
     },
  
 
     'click .no': function () {
       Articles.update(Session.get("selectedArticle"), 
        {$push: {'labels': {userid: Meteor.userId(), username: Meteor.user().profile['name'], label: 'No'}}});
-      location.reload();
+        $("#leaderboard").load(location.href + " #leaderboard");
     } 
   });
 
