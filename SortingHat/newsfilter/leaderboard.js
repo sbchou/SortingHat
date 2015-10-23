@@ -24,13 +24,17 @@ if (Meteor.isClient) {
       }
     },
 
-    /*
-    'player': function(){
-      var currentUserId = Meteor.userId();
-      return PlayersList.find({createdBy: currentUserId},
-                              {sort: {score: -1, name: 1}});
-    },
-    */
+    noEntries: function () {
+     if ((Articles.find().count() === 0) && Meteor.user().profile['name'] === 'Sophie Chou') {
+      // If hide completed is checked, filter tasks 
+        return true;
+      }  
+     else{
+      return false;
+     }
+    }
+    ,
+
     showCompleted: function () {
       return Session.get("showCompleted");
     },

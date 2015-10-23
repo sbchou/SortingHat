@@ -12,19 +12,22 @@
 
     <div class="logo"></div>
     <h1 class="title">SORTING HAT</h1>
- 
-    {{> upload}} 
+
     {{> leaderboard}}  
+
+    {{> upload}} 
   </div>
 </body>
 
 <!-- CSV uploader -->
 <template name="upload"> 
+  <center>
   {{#if noEntries}}
-     No entries? Upload a CSV file! 
+     Upload a CSV file! 
     <input type="file" id="files" name="files[]" multiple />
     <output id="list"></output> 
   {{/if}}
+  </center>
 </template>
  
 
@@ -47,45 +50,50 @@
       -->
     </div> 
 
+      {{#unless noEntries}}
         <h1><center>Is this article about the election?</center></h1>
+      {{/unless}}
 
+      {{#if noEntries}}
+        <h1><center>Oops! Looks like you're out of articles.</center></h1>
+      {{/if}}
       
         <ul class="leaderboard">
          {{#each articles}} 
             {{> article}}
-
+          
+            {{#if selectedName}}
+             <div class="details"> 
+              <!--<div class="name">{{selectedName}}</div> --> 
+              <button class="no">No</button>
+              <button class="yes">Yes</button> 
+            </div> 
+            {{/if}}
           {{else}}
-          <center>
-            <h1>You're all done!</h1>
+           {{#unless noEntries}}
+            <center>
+              <h1>You're all done!</h1>
+              
+              <h2>
+              <p>Thanks for playing.</p>
+
+              <p>You classified {{numTrue}} articles as U.S. Election related, and {{numFalse}} articles as unrelated.</p>
+
+               {{#each results}}
+                {{> result}}
+              {{/each}}
             
-            <h2>
-            <p>Thanks for playing.</p>
+              </h2> 
 
-            <p>You classified {{numTrue}} articles as U.S. Election related, and {{numFalse}} articles as unrelated.</p>
+            </center>
 
-             {{#each results}}
-              {{> result}}
-            {{/each}}
+        {{/unless}}
 
-
-            
-            </h2>
-
-          </center>
-
-         {{/each}} 
+        {{/each}} 
+          
         </ul>
-        {{#if selectedName}}
-          <div class="details"> 
-            <!--<div class="name">{{selectedName}}</div> --> 
-            <button class="no">No</button>
-            <button class="yes">Yes</button> 
-          </div>
-        <!--
-        {{else}}
-          <div class="message">Click a article to select</div>
-        -->
-        {{/if}}
+ 
+         
       {{/if}} 
 </template>
 
