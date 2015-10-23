@@ -51,12 +51,16 @@
     </div> 
 
       {{#unless noEntries}}
-        <h1><center>Is this article about the election?</center></h1>
+        {{#unless allDone}}
+          <h1><center>Is this article about the election?</center></h1>
+        {{/unless}}
       {{/unless}}
 
       {{#if noEntries}}
         <h1><center>Oops! Looks like you're out of articles.</center></h1>
-      {{/if}}
+      
+
+      {{else}}
       
         <ul class="leaderboard">
          {{#each articles}} 
@@ -70,7 +74,7 @@
             </div> 
             {{/if}}
           {{else}}
-           {{#unless noEntries}}
+           {{#if allDone}}
             <center>
               <h1>You're all done!</h1>
               
@@ -87,12 +91,13 @@
              
             </center>
 
-        {{/unless}}
+        {{/if}}
 
         {{/each}} 
            
       
         </ul>
+         {{/if}}
          
       {{/if}} 
 </template>

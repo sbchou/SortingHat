@@ -32,17 +32,15 @@ if (Meteor.isClient) {
      else{
       return false;
      }
-    }
-    ,
-
-    showCompleted: function () {
-      return Session.get("showCompleted");
     },
     incompleteCount: function () {
         return Articles.find({'labels.userid':{$ne : Meteor.userId()}, body:{$ne:''}}).count();
     },
     completeCount: function (){
         return Articles.find({'labels.userid': Meteor.userId()}).count()    },
+    allDone: function (){
+    return Articles.find({'labels.userid':{$ne : Meteor.userId()}, body:{$ne:''}}).count() === 0;
+     },
     totalCount: function(){
         return Articles.find({'body':{$ne:''}}).count();
     },
