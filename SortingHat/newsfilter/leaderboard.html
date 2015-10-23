@@ -23,7 +23,7 @@
 <template name="upload"> 
   <center>
   {{#if noEntries}}
-     Upload a CSV file! 
+     No entries? Upload a CSV file! 
     <input type="file" id="files" name="files[]" multiple />
     <output id="list"></output> 
   {{/if}}
@@ -79,20 +79,20 @@
 
               <p>You classified {{numTrue}} articles as U.S. Election related, and {{numFalse}} articles as unrelated.</p>
 
+              </h2> 
+
                {{#each results}}
                 {{> result}}
               {{/each}}
-            
-              </h2> 
-
+             
             </center>
 
         {{/unless}}
 
         {{/each}} 
-          
+           
+      
         </ul>
- 
          
       {{/if}} 
 </template>
@@ -101,10 +101,9 @@
   <ul class="article {{selected}}">  
     <span class="name">{{title}}</span>  
 
-    <span class="description">Your guess: {{#each labels}} {{this.label}} {{/each}}</span> 
-    <span class="description">Machine guess: {{confidence}}% Yes </span>   
+    <span class="result">Your guess: {{#each labels}} {{this.label}} {{/each}}</span> 
+    <span class="result">Machine guess: {{confidence}}% Yes </span>   
      
-
   </ul>
 </template>
 
