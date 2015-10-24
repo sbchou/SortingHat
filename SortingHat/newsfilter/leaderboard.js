@@ -2,6 +2,8 @@
 // it is backed by a MongoDB collection titled "articles".
 
 Articles = new Mongo.Collection("articles");
+Users = Mongo.Collection("users");
+Votes = Mongo.Collection("votes");
 
 if (Meteor.isClient) { 
   Meteor.subscribe('theArticles');
