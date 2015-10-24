@@ -2,11 +2,11 @@
 // it is backed by a MongoDB collection titled "articles".
 
 Articles = new Mongo.Collection("articles");
-Users = Mongo.Collection("users");
-Votes = Mongo.Collection("votes");
+Labels = new Mongo.Collection("labels");
 
 if (Meteor.isClient) { 
   Meteor.subscribe('theArticles');
+  Meteor.subscribe('theLabels');
 
   Template.leaderboard.helpers({
 
@@ -14,7 +14,7 @@ if (Meteor.isClient) {
       var currentUserId = Meteor.userId(); 
       // objects we haven't labeled yet. does this work?
       //IF NO MORE LEFT
-      p = Articles.findOne({'body':{$ne:''}, 'labels.userid':{$ne:currentUserId}});
+      p = Articles.findOne({'body':{$ne:''}, 'user_ids':{$ne:currentUserId}});
       if(typeof p === 'undefined'){
         console.log('NO MORE ARTICLES');
         allDone = true;
@@ -82,17 +82,47 @@ if (Meteor.isClient) {
   Template.leaderboard.events({
 
     'click .yes': function () {
+
+      id = Date.now().toString().substr(4);
+
+      Labels.insert({
+        _id : id,
+        article_id : Session.get("selectedArticle"),
+        user_id : Meteor.userId(),
+        timestamp : Date.now(),
+        is_election: 1
+      });
+
+      console.log(id);
+      //add this user and this label to the article
       Articles.update(Session.get("selectedArticle"),
-       {$push: {'labels': {userid: Meteor.userId(), username: Meteor.user().profile['name'], label: 'Yes'}}});
-        $("#leaderboard").load(location.href + " #leaderboard");
+       {$push: {'label_ids': id, 'user_ids': Meteor.userId()}
+      });
+
+      $("#leaderboard").load(location.href + " #leaderboard");
     },
  
 
     'click .no': function () {
-      Articles.update(Session.get("selectedArticle"), 
-       {$push: {'labels': {userid: Meteor.userId(), username: Meteor.user().profile['name'], label: 'No'}}});
-        $("#leaderboard").load(location.href + " #leaderboard");
-    } 
+
+      id = Date.now().toString().substr(4);
+
+      Labels.insert({
+        _id : id,
+        article_id : Session.get("selectedArticle"),
+        user_id : Meteor.userId(),
+        timestamp : Date.now(),
+        is_election: 0
+      });
+
+      console.log(id);
+      //add this user and this label to the article
+      Articles.update(Session.get("selectedArticle"),
+       {$push: {'label_ids': id, 'user_ids': Meteor.userId()}
+      });
+
+      $("#leaderboard").load(location.href + " #leaderboard");
+    }
   });
 
   Template.article.helpers({
@@ -111,7 +141,8 @@ if (Meteor.isClient) {
             var text = e.target.result;  
             var all = $.csv.toObjects(text);  
             _.each(all, function (entry) {
-              entry.labels = []; // add labels array
+              entry.label_ids = []; // add labels array
+              entry.user_ids = [];
               entry.confidence = Math.floor(parseFloat(entry.election_news_confidence) * 100);
               Articles.insert(entry);
             });
@@ -138,14 +169,16 @@ if (Meteor.isClient) {
 
 //return Articles.find({type: {$exists: true}}).count();
 
-// On server startup, create some articles if the database is empty.
+// On server startup, create some articles if the database is empty
 if (Meteor.isServer) {
 
     Meteor.publish('theArticles', function(){
       var currentUserId = this.userId;
       return Articles.find({});
     });
-    //if (Articles.find().count() === 0){
-    //  Session.set("noEntries", true);
-    //} 
+
+    Meteor.publish('theLabels', function(){
+      var currentUserId = this.userId;
+      return Labels.find({});
+    });
 }
