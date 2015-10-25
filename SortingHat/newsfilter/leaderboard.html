@@ -20,30 +20,69 @@
  
 
 <template name="leaderboard">
-   
-    <center>
+     
+  {{#if currentUser}} <!-- gotta be logged in -->
     {{#if noEntries}}
-       No entries? Upload a CSV file! 
-      <input type="file" id="files" name="files[]" multiple />
-      <output id="list"></output> 
-    {{/if}}
-    </center>
+      <center>
+        <h1>
+          Oops! Looks like you're out of articles.
+        </h1> 
+        {{#if isAdmin}}
+         No entries? Upload a CSV file! 
+        <input type="file" id="files" name="files[]" multiple />
+        <output id="list"></output> 
+        {{/if}}
+      </center>
+    {{/if}} <!-- end if for noEntries -->
+    
+    {{#if allDone}}
+      <center>
+        <h1>You're all done!</h1>
+        
+        <h2>
+        <p>Thanks for playing.</p>
 
+        <p>You classified {{numTrue}} articles as U.S. Election related, and {{numFalse}} articles as unrelated.</p>
 
-    {{#if currentUser}}
+        </h2> 
+
+         {{#each results}}
+          {{> result}}
+        {{/each}}
+       
+      </center>
+
+    {{/if}} <!-- allDone -->
+
+    <!-- otherwise business as usual -->
     <div class="progress">
-        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{completeCount}}
+      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{completeCount}}
         aria-valuemin="0" aria-valuemax="100" style="width:{{percent_complete}}%">
         <span class>{{completeCount}}</span>
       </div>  
+    </div> 
+
+    {{#each articles}} 
+      {{> article}}
+        {{#if selectedArticle}}
+         <div class="details">  
+          <button class="no">No</button>
+          <button class="yes">Yes</button> 
+        </div> 
+        {{/if}}
+      {{else}}
+    {{/each}} 
+           
 
  
-      <!--
-      <div class="progress-bar" role="progressbar" aria-valuenow={{completeCount}}
-        aria-valuemin="0" aria-valuemax="100" style="width:{{percent_remain}}%">
-        <span class>{{incompleteCount}}</span>
-      </div>  
-      -->
+  {{/if}} <!-- end if for logged-in-->
+</template>
+
+
+  <!--
+
+
+   
     </div> 
 
       {{#unless noEntries}}
@@ -52,8 +91,6 @@
         {{/unless}}
       {{/unless}}
 
-      {{#if noEntries}}
-        <h1><center>Oops! Looks like you're out of articles.</center></h1>
       
 
       {{else}}
@@ -63,39 +100,31 @@
             {{> article}}
           
             {{#if selectedName}}
-             <div class="details"> 
-              <!--<div class="name">{{selectedName}}</div> --> 
+             <div class="details">  
               <button class="no">No</button>
               <button class="yes">Yes</button> 
             </div> 
             {{/if}}
           {{else}}
-           {{#if allDone}}
-            <center>
-              <h1>You're all done!</h1>
-              
-              <h2>
-              <p>Thanks for playing.</p>
-
-              <p>You classified {{numTrue}} articles as U.S. Election related, and {{numFalse}} articles as unrelated.</p>
-
-              </h2> 
-
-               {{#each results}}
-                {{> result}}
-              {{/each}}
-             
-            </center>
-
-        {{/if}}
+           
 
         {{/each}} 
            
       
         </ul>
-         {{/if}}
-         
-      {{/if}} 
+      {{/if}}       
+  {{/if}} 
+  -->
+ 
+<template name="article">
+  <ul class="article {{selected}}">  
+     
+    <!--<span class="score">{{r}}</span>  -->
+    <span class="name">{{title}}</span> 
+    <span class="description">{{body}}</span>
+
+
+  </ul>
 </template>
 
 <template name="result">
@@ -107,16 +136,4 @@
      
   </ul>
 </template>
-
-<template name="article">
-  <ul class="article {{selected}}">  
-     
-    <!--<span class="score">{{r}}</span>  -->
-    <span class="name">{{title}}</span> 
-    <span class="description">{{body}}</span>
-
-
-  </ul>
-</template>
  
-

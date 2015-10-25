@@ -34,6 +34,15 @@ if (Meteor.isClient) {
      return (Articles.find().count() === 0);
     },
 
+    allDone: function (){
+    return Articles.find({'user_ids':{$ne : Meteor.userId()}, body:{$ne:''}}).count() === 0;
+    },
+
+    selectedArticle: function () {
+      var article = Articles.findOne(Session.get("selectedArticle"));
+ 
+      return article && article.title;
+    },
 
 
     /*
@@ -42,9 +51,7 @@ if (Meteor.isClient) {
     },
     completeCount: function (){
         return Articles.find({'labels.userid': Meteor.userId()}).count()    },
-    allDone: function (){
-    return Articles.find({'labels.userid':{$ne : Meteor.userId()}, body:{$ne:''}}).count() === 0;
-     },
+ 
     totalCount: function(){
         return Articles.find({'body':{$ne:''}}).count();
     },
