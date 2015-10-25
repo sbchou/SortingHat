@@ -14,26 +14,22 @@
     <h1 class="title">SORTING HAT</h1>
 
     {{> leaderboard}}  
-
-    {{> upload}} 
+ 
   </div>
 </body>
-
-<!-- CSV uploader -->
-<template name="upload"> 
-  <center>
-  {{#if noEntries}}
-     No entries? Upload a CSV file! 
-    <input type="file" id="files" name="files[]" multiple />
-    <output id="list"></output> 
-  {{/if}}
-  </center>
-</template>
  
 
 <template name="leaderboard">
-     <!--<div class="subtitle">({{completeCount}}) done &amp; ({{incompleteCount}}) left</div> -->
- 
+   
+    <center>
+    {{#if noEntries}}
+       No entries? Upload a CSV file! 
+      <input type="file" id="files" name="files[]" multiple />
+      <output id="list"></output> 
+    {{/if}}
+    </center>
+
+
     {{#if currentUser}}
     <div class="progress">
         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{completeCount}}

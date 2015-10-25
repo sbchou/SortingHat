@@ -26,15 +26,17 @@ if (Meteor.isClient) {
       }
     },
 
-    noEntries: function () {
-     if ((Articles.find().count() === 0) && Meteor.user().profile['name'] === 'Sophie Chou') {
-      // If hide completed is checked, filter tasks 
-        return true;
-      }  
-     else{
-      return false;
-     }
+    isAdmin: function(){
+      return (Meteor.user().profile['name'] === 'Sophie Chou');
     },
+ 
+    noEntries: function () {
+     return (Articles.find().count() === 0);
+    },
+
+
+
+    /*
     incompleteCount: function () {
         return Articles.find({'labels.userid':{$ne : Meteor.userId()}, body:{$ne:''}}).count();
     },
@@ -75,11 +77,32 @@ if (Meteor.isClient) {
         {fields : {'title':1, 'labels':1, 'confidence':1}});
 
     }
+    */
 
   });
 
 
   Template.leaderboard.events({
+    // for the file uploader
+    "change #files": function (e) {
+      var files = e.target.files || e.dataTransfer.files;
+      for (var i = 0, file; file = files[i]; i++) {
+        if (file.type.indexOf("text") == 0) {
+          var reader = new FileReader();
+          reader.onloadend = function (e) {
+            var text = e.target.result;  
+            var all = $.csv.toObjects(text);  
+            _.each(all, function (entry) {
+              entry.label_ids = []; // add labels array
+              entry.user_ids = [];
+              entry.confidence = Math.floor(parseFloat(entry.election_news_confidence) * 100);
+              Articles.insert(entry);
+            });
+          }
+          reader.readAsText(file);
+        }
+      }
+    },
 
     'click .yes': function () {
 
@@ -129,41 +152,7 @@ if (Meteor.isClient) {
     selected: function () {
       return Session.equals("selectedArticle", this._id) ? "selected" : '';
     }
-  });
-
-  Template.upload.events({
-    "change #files": function (e) {
-      var files = e.target.files || e.dataTransfer.files;
-      for (var i = 0, file; file = files[i]; i++) {
-        if (file.type.indexOf("text") == 0) {
-          var reader = new FileReader();
-          reader.onloadend = function (e) {
-            var text = e.target.result;  
-            var all = $.csv.toObjects(text);  
-            _.each(all, function (entry) {
-              entry.label_ids = []; // add labels array
-              entry.user_ids = [];
-              entry.confidence = Math.floor(parseFloat(entry.election_news_confidence) * 100);
-              Articles.insert(entry);
-            });
-          }
-          reader.readAsText(file);
-        }
-      }
-    }
-  });
-
-  Template.upload.helpers({
-    noEntries: function () {
-       if ((Articles.find().count() === 0) && Meteor.user().profile['name'] === 'Sophie Chou') {
-        // If hide completed is checked, filter tasks 
-          return true;
-        }  
-       else{
-        return false;
-       }
-      }
-    }); 
+  });  
    
  }
 
