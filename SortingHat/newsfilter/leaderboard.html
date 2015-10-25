@@ -22,6 +22,15 @@
 <template name="leaderboard">
      
   {{#if currentUser}} <!-- gotta be logged in -->
+
+    <!-- progress bar is always at the top -->
+    <div class="progress">
+      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{completeCount}}
+        aria-valuemin="0" aria-valuemax="100" style="width:{{percent_complete}}%">
+        <span class>{{completeCount}}</span>
+      </div>  
+    </div> 
+
     {{#if noEntries}}
       <center>
         <h1>
@@ -55,12 +64,6 @@
     {{/if}} <!-- allDone -->
 
     <!-- otherwise business as usual -->
-    <div class="progress">
-      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{completeCount}}
-        aria-valuemin="0" aria-valuemax="100" style="width:{{percent_complete}}%">
-        <span class>{{completeCount}}</span>
-      </div>  
-    </div> 
 
     {{#each articles}} 
       {{> article}}
@@ -73,48 +76,8 @@
       {{else}}
     {{/each}} 
            
-
- 
   {{/if}} <!-- end if for logged-in-->
 </template>
-
-
-  <!--
-
-
-   
-    </div> 
-
-      {{#unless noEntries}}
-        {{#unless allDone}}
-          <h1><center>Is this article about the election?</center></h1>
-        {{/unless}}
-      {{/unless}}
-
-      
-
-      {{else}}
-      
-        <ul class="leaderboard">
-         {{#each articles}} 
-            {{> article}}
-          
-            {{#if selectedName}}
-             <div class="details">  
-              <button class="no">No</button>
-              <button class="yes">Yes</button> 
-            </div> 
-            {{/if}}
-          {{else}}
-           
-
-        {{/each}} 
-           
-      
-        </ul>
-      {{/if}}       
-  {{/if}} 
-  -->
  
 <template name="article">
   <ul class="article {{selected}}">  
@@ -129,10 +92,9 @@
 
 <template name="result">
   <ul class="article {{selected}}">  
-    <span class="name">{{title}}</span>  
-
-    <span class="result">Your guess: {{#each labels}} {{this.label}} {{/each}}</span> 
-    <span class="result">Machine guess: {{confidence}}% Yes </span>   
+    <span class="name">{{article_title}}</span>  
+    <span class="result">Your guess: {{is_election}}</span> 
+    <span class="result">Machine guess: {{article_conf}}% Yes </span>   
      
   </ul>
 </template>

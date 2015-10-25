@@ -52,46 +52,19 @@ if (Meteor.isClient) {
       return Math.round(( completed / total ) * 100);
     },
 
-    /*
-    incompleteCount: function () {
-        return Articles.find({'labels.userid':{$ne : Meteor.userId()}, body:{$ne:''}}).count();
-    },
-    completeCount: function (){
-        return Articles.find({'labels.userid': Meteor.userId()}).count()    },
- 
-    totalCount: function(){
-        return Articles.find({'body':{$ne:''}}).count();
-    },
-    percent_complete: function(){
-      var completed = Articles.find({'labels.userid': Meteor.userId()}).count();
-      var total = Articles.find({'body':{$ne:''}}).count();
-      return Math.round(( completed / total ) * 100);
-    },
-    percent_remain: function(){
-      var incompleted = Articles.find({'labels.userid':{$ne : Meteor.userId()}, body:{$ne:''}}).count();
-      var total = Articles.find({}).count();
-      return Math.round(( incompleted / total ) * 100);
-    },
-    selectedName: function () {
-      var article = Articles.findOne(Session.get("selectedArticle"));
- 
-      return article && article.title;
-    },
-    
     numTrue: function(){
-      return Articles.find({'labels.userid':Meteor.userId(), 'labels.label':'Yes'}).count();
+      return Labels.find({'user_id':Meteor.userId(), is_election : 1}).count();
     },
     numFalse: function(){
-      return Articles.find({'labels.userid':Meteor.userId(), 'labels.label':'No'}).count();
+      return Labels.find({'user_id':Meteor.userId(), is_election : 0}).count();
     },
 
-    results: function(){
-      console.log(Articles.findOne({'labels.userid':Meteor.userId()}, {title:1}));
-      return Articles.find({'labels.userid':Meteor.userId()}, 
-        {fields : {'title':1, 'labels':1, 'confidence':1}});
 
+    //results for user!
+    results: function(){ 
+      return Labels.find({'user_id': Meteor.userId()});
     }
-    */
+  
 
   });
 
@@ -122,15 +95,26 @@ if (Meteor.isClient) {
 
       id = Date.now().toString().substr(4);
 
+      article_title = Articles.find( {_id:Session.get("selectedArticle")}).map(function(x) { return x.title;});
+
+      console.log(article_title);
+
+      article_conf = Articles.find( {_id:Session.get("selectedArticle")}, {fields: {'confidence': 1}}).map(function(x) {return x.confidence;});
+
+      console.log(article_conf);
+      
+ 
       Labels.insert({
         _id : id,
         article_id : Session.get("selectedArticle"),
+        article_title: article_title[0],
+        article_conf: article_conf[0],
         user_id : Meteor.userId(),
         timestamp : Date.now(),
-        is_election: 1
-      });
+        is_election: 'Yes',
 
-      console.log(id);
+      }); 
+
       //add this user and this label to the article
       Articles.update(Session.get("selectedArticle"),
        {$push: {'label_ids': id, 'user_ids': Meteor.userId()}
@@ -144,15 +128,26 @@ if (Meteor.isClient) {
 
       id = Date.now().toString().substr(4);
 
+      article_title = Articles.find( {_id:Session.get("selectedArticle")}).map(function(x) { return x.title;});
+
+      console.log(article_title);
+
+      article_conf = Articles.find( {_id:Session.get("selectedArticle")}, {fields: {'confidence': 1}}).map(function(x) {return x.confidence;});
+
+      console.log(article_conf);
+      
+ 
       Labels.insert({
         _id : id,
         article_id : Session.get("selectedArticle"),
+        article_title: article_title[0],
+        article_conf: article_conf[0],
         user_id : Meteor.userId(),
         timestamp : Date.now(),
-        is_election: 0
-      });
+        is_election: 'No',
 
-      console.log(id);
+      }); 
+
       //add this user and this label to the article
       Articles.update(Session.get("selectedArticle"),
        {$push: {'label_ids': id, 'user_ids': Meteor.userId()}
