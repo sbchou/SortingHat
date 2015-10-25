@@ -93,7 +93,11 @@
 <template name="result">
   <ul class="article {{selected}}">  
     <span class="name">{{article_title}}</span>  
-    <span class="result">Your guess: {{is_election}}</span> 
+    {{#if is_election}}
+      <span class="result">Your guess: Yes </span> 
+    {{else}}
+      <span class="result">Your guess: No </span> 
+    {{/if}}
     <span class="result">Machine guess: {{article_conf}}% Yes </span>   
      
   </ul>

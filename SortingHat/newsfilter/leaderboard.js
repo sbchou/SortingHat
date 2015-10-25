@@ -111,7 +111,7 @@ if (Meteor.isClient) {
         article_conf: article_conf[0],
         user_id : Meteor.userId(),
         timestamp : Date.now(),
-        is_election: 'Yes',
+        is_election: 1
 
       }); 
 
@@ -144,7 +144,7 @@ if (Meteor.isClient) {
         article_conf: article_conf[0],
         user_id : Meteor.userId(),
         timestamp : Date.now(),
-        is_election: 'No',
+        is_election: 0
 
       }); 
 
