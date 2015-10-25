@@ -43,7 +43,14 @@ if (Meteor.isClient) {
  
       return article && article.title;
     },
-
+    completeCount: function (){
+      return Articles.find({'user_ids': Meteor.userId()}).count()
+    },
+    percent_complete: function(){
+      var completed = Articles.find({'user_ids': Meteor.userId()}).count();
+      var total = Articles.find({'body':{$ne:''}}).count();
+      return Math.round(( completed / total ) * 100);
+    },
 
     /*
     incompleteCount: function () {
