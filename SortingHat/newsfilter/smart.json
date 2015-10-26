@@ -1,6 +1,7 @@
 {
   "packages": {
-   "jquery-csv": {},
-    "npm": {}
+    "jquery-csv": {},
+    "npm": {},
+    "keybindings": {}
   }
 }

@@ -31,16 +31,19 @@
       </div>  
     </div> 
 
+    <!-- Admin always has opp to insert more. -->
+    {{#if isAdmin}}
+        <bold>Admin</bold>: do you want to add more entries?
+        <input type="file" id="files" name="files[]" multiple />
+        <output id="list"></output> 
+    {{/if}}
+
+
     {{#if noEntries}}
       <center>
         <h1>
           Oops! Looks like you're out of articles.
         </h1> 
-        {{#if isAdmin}}
-         No entries? Upload a CSV file! 
-        <input type="file" id="files" name="files[]" multiple />
-        <output id="list"></output> 
-        {{/if}}
       </center>
     {{/if}} <!-- end if for noEntries -->
     

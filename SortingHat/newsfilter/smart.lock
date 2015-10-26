@@ -3,7 +3,8 @@
   "dependencies": {
     "basePackages": {
       "jquery-csv": {},
-      "npm": {}
+      "npm": {},
+      "keybindings": {}
     },
     "packages": {
       "jquery-csv": {
@@ -15,6 +16,11 @@
         "git": "https://github.com/arunoda/meteor-npm.git",
         "tag": "v0.2.6",
         "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
+      },
+      "keybindings": {
+        "git": "https://github.com/matteodem/meteor-keybindings.git",
+        "tag": "v0.4.1",
+        "commit": "d461475eec435acd8b61af6f1b8696fc70fcea78"
       }
     }
   }
