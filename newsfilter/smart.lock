@@ -1,0 +1,27 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "jquery-csv": {},
+      "npm": {},
+      "keybindings": {}
+    },
+    "packages": {
+      "jquery-csv": {
+        "git": "https://github.com/donskifarrell/meteor-jquery-csv.git",
+        "tag": "v0.7.1",
+        "commit": "7a7d868dd85da5d64dc4a174a3e5d5e2bbf90c03"
+      },
+      "npm": {
+        "git": "https://github.com/arunoda/meteor-npm.git",
+        "tag": "v0.2.6",
+        "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
+      },
+      "keybindings": {
+        "git": "https://github.com/matteodem/meteor-keybindings.git",
+        "tag": "v0.4.1",
+        "commit": "d461475eec435acd8b61af6f1b8696fc70fcea78"
+      }
+    }
+  }
+}
