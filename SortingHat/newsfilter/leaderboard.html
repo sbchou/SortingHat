@@ -50,13 +50,29 @@
     {{#if allDone}}
       <center>
         <h1>You're all done!</h1>
-        
-        <h2>
-        <p>Thanks for playing.</p>
 
         <p>You classified {{numTrue}} articles as U.S. Election related, and {{numFalse}} articles as unrelated.</p>
 
-        </h2> 
+        <h2><p>Summary:</p></h2>
+        <p>Was this article about the election?</p>
+
+        Player: 
+        {{#each results}}
+          {{> humancheck}}
+        {{/each}} 
+      
+        <br>
+        S. Hat:
+
+        {{#each machineResults}}
+          {{#if .}}
+            <input type="checkbox" disabled="disabled" checked="checked">  
+          {{else}}
+            <input type="checkbox" disabled="disabled">  
+          {{/if}}
+        {{/each}}       
+
+        <h2><p>All Articles:</p></h2>
 
          {{#each results}}
           {{> result}}
@@ -64,22 +80,22 @@
        
       </center>
 
-    {{/if}} <!-- allDone -->
+    {{else}} <!-- allDone -->
+      <h1> Is this article about the U.S. Election? </h1>
+      <!-- otherwise business as usual -->
 
-    <!-- otherwise business as usual -->
-
-    {{#each articles}} 
-      {{> article}}
-        {{#if selectedArticle}}
-         <div class="details">  
-          <button class="no">No</button>
-          <button class="yes">Yes</button> 
-        </div> 
-        {{/if}}
-      {{else}}
-    {{/each}} 
-           
-  {{/if}} <!-- end if for logged-in-->
+      {{#each articles}} 
+        {{> article}}
+          {{#if selectedArticle}}
+           <div class="details">  
+            <button class="no">No</button>
+            <button class="yes">Yes</button> 
+          </div> 
+          {{/if}}
+        {{else}}
+      {{/each}}   
+    {{/if}} <!-- end if for logged-in-->
+  {{/if}}
 </template>
  
 <template name="article">
@@ -88,20 +104,27 @@
     <!--<span class="score">{{r}}</span>  -->
     <span class="name">{{title}}</span> 
     <span class="description">{{body}}</span>
-
-
   </ul>
 </template>
 
-<template name="result">
+<template name="humancheck">  
+    {{#if user_label}}
+      <input type="checkbox" disabled="disabled" checked="checked">  
+    {{else}}
+      <input type="checkbox" disabled="disabled"> 
+    {{/if}} 
+</template>
+
+<template name="result"> 
+
   <ul class="article {{selected}}">  
     <span class="name">{{article_title}}</span>  
-    {{#if is_election}}
-      <span class="result">Your guess: Yes </span> 
+    {{#if user_label}}
+      <span class="result">You said: Yes </span> 
     {{else}}
-      <span class="result">Your guess: No </span> 
+      <span class="result">You said: No </span> 
     {{/if}}
-    <span class="result">Machine guess: {{article_conf}}% Yes </span>   
+    <span class="result">Sorting hat is {{article_conf}}% sure this is about the Election </span>   
      
   </ul>
 </template>

@@ -54,17 +54,31 @@ if (Meteor.isClient) {
     },
 
     numTrue: function(){
-      return Labels.find({'user_id':Meteor.userId(), is_election : 1}).count();
+      return Labels.find({'user_id':Meteor.userId(), user_label : 1}).count();
     },
     numFalse: function(){
-      return Labels.find({'user_id':Meteor.userId(), is_election : 0}).count();
+      return Labels.find({'user_id':Meteor.userId(), user_label : 0}).count();
     },
-
 
     //results for user!
     results: function(){ 
-      return Labels.find({'user_id': Meteor.userId()});
+      return Labels.find({'user_id': Meteor.userId()}, 
+        {$sort: { timestamp: -1 }});
+    },
+
+    //machine confidences
+    machineResults: function(){  
+      var values = Labels.find({'user_id': Meteor.userId()}, {fields : {'article_conf':1}}, {$sort: { timestamp: -1 }}).map(function(x) { return x.article_conf;});
+      // can't do list comprehensions
+      var bools = []
+      for (var i = 0; i < values.length; i++) {
+           bools.push(values[i] > 50);
+      } 
+      return bools;
     }
+
+
+
   
 
   });
@@ -112,7 +126,7 @@ if (Meteor.isClient) {
         article_conf: article_conf[0],
         user_id : Meteor.userId(),
         timestamp : Date.now(),
-        is_election: 1
+        user_label: 1
 
       }); 
 
@@ -145,7 +159,7 @@ if (Meteor.isClient) {
         article_conf: article_conf[0],
         user_id : Meteor.userId(),
         timestamp : Date.now(),
-        is_election: 0
+        user_label: 0
 
       }); 
 
