@@ -1,0 +1,110 @@
+<head>
+  <title>Sorting Hat</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
+  <script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+ 
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+ 
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+</head>
+
+<body>
+  <div class="outer">
+    <div class="logo"></div>
+    <h1 class="title">SORTING HAT</h1>
+
+    {{> upload}}
+    {{> leaderboard}}
+  </div>
+</body>
+
+<!-- CSV uploader -->
+<template name="upload"> 
+  {{#if noEntries}}
+     No entries? Upload a CSV file! 
+    <input type="file" id="files" name="files[]" multiple />
+    <output id="list"></output> 
+  {{/if}}
+</template>
+
+<template name="leaderboard">
+    <!--<div class="subtitle">({{completeCount}}) done &amp; ({{incompleteCount}}) left</div>-->
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow={{completeCount}}
+      aria-valuemin="0" aria-valuemax="100" style="width:{{percentage}}%">
+      <span class="sr-only">{{percentage}}%</span>
+      </div>
+    </div>
+
+    <!--<label class="show-completed">
+        <input type="checkbox" checked="{{showCompleted}}" />
+        Show Annotated Tweets
+    </label>-->
+    
+  <ul class="leaderboard">
+   {{#each players}} 
+      {{> player}}
+   {{/each}} 
+  </ul>
+ {{#if selectedName}}
+    <div class="details"> 
+      <!--<div class="name">{{selectedName}}</div> --> 
+      <button class="org">Org</button>
+      <button class="person">Person</button>
+      <button class="unsure">?</button>
+      <div id ='timeline'></div>
+      <!--<a class="twitter-timeline" href="https://twitter.com/mpetitchou" data-widget-id="631684275625029632" data-screen-name={{selectedName}}>Tweets by @mpetitchou</a>-->
+
+      <script> 
+      twttr.ready(
+
+        function (twttr) {
+          twttr.widgets.createTimeline(
+          '631684275625029632',
+
+            document.getElementById('timeline'),
+            {
+              width: '450',
+              height: '700',
+              screenName: "{{selectedName}}",
+              //userId also works!
+            }).then(function (el) {
+              console.log("Embedded a timeline.")
+            });
+        }
+      );
+      /*!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");*/
+      </script>
+
+
+    </div>
+  {{else}}
+    <div class="message">Click a player to select</div>
+  {{/if}}
+</template>
+
+<template name="player">
+  <ul class="player {{selected}}">
+    <!--<div class="name">{{selectedName}}</div>-->
+     
+    <span class="name">@{{name}}</span>
+    <span class="description">{{description}}</span>
+    <!--<span class="score">{{score}}</span>-->
+    <span class="score">{{type}}</span>
+    <span class="img"><img src={{picture}}></span>
+
+  </ul>
+</template>
+
