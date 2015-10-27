@@ -30,6 +30,8 @@ def main(infile, outfile):
                     print 'By count', body.count('By'), title_clean
                     continue
 
+                body.replace('itoggle caption', '').replace('hide caption', '')
+
                 body = body.split('\n')
                 body = [x.lstrip() for x in body]
                 body = [x.strip() for x in body if x.strip()]
