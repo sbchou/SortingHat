@@ -1,6 +1,11 @@
 import sys
 import csv
 
+def dedupe(ls):
+    seen = set()
+    seen_add = seen.add
+    return [ x for x in ls if not (x in seen or seen_add(x))]
+
 def main(infile, outfile):
     titles = []
     with open(outfile, 'w') as fp:
@@ -15,7 +20,7 @@ def main(infile, outfile):
                 print 'THIS', row[0].lstrip().strip()
                 if len(row) < 4:
                     import pdb; pdb.set_trace() 
-                title_clean = row[0].lstrip().strip()
+                title_clean = row[0].lstrip().strip().replace('&#8217;', "\'").replace('mln', 'million')
                 if title_clean in titles:
                     print 'seen title', title_clean
                     continue
@@ -32,14 +37,17 @@ def main(infile, outfile):
                     print 'By count', body.count('By'), title_clean
                     continue
 
-                body.replace('itoggle caption', '').replace('hide caption', '')
-
+                body = body.replace('itoggle caption', '').replace('hide caption', '')
+                body = body.replace('&#8217;', "\'")
                 body = body.split('\n')
                 body = [x.lstrip() for x in body]
                 body = [x.strip() for x in body if x.strip()]
+                body = dedupe(body)
+
                 body = [' '.join(x.split()) for x in body if x != '' and x != 'i']  
                 body = "\n\n".join(body)
                 a.writerow([row[0], row[1], row[2], body, row[4]])
+
 
 
 if __name__ == "__main__":
