@@ -5,6 +5,10 @@ Articles = new Mongo.Collection("articles");
 Labels = new Mongo.Collection("labels");
 
 if (Meteor.isClient) { 
+  var width = $(window).width() - 25; 
+  $("#outer").width(width);
+
+
   Meteor.subscribe('theArticles');
   Meteor.subscribe('theLabels');
  
@@ -184,27 +188,6 @@ if (Meteor.isClient) {
 
 // On server startup, create some articles if the database is empty
 if (Meteor.isServer) {
-
-   /*if (Articles.find().count() === 0) { 
-        var data = HTTP.get(Meteor.absoluteUrl("data/26-10-2015/day.json")).data;
-        console.log("Importing json to db");
-        data.forEach(function (item, index, array) {
-          console.log(item);
-            Articles.insert(item);
-        })
-
-        /*
-        console.log("Importing private/products.json to db");
-
-        var data = JSON.parse(Assets.getText("finalfile.txt"));
-
-        data.forEach(function (item, index, array) {
-          console.log(item);
-            Articles.insert(item);
-        })
-      */    
-    //}
-
 
     Meteor.publish('theArticles', function(){
       var currentUserId = this.userId;
