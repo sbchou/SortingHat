@@ -11,6 +11,8 @@ def main(infile, outfile):
         with open(infile) as csvfile:
             spamrider = csv.reader(csvfile)
             for row in spamrider:
+                print "TITTLES", titles
+                print 'THIS', row[0].lstrip().strip()
                 if len(row) < 4:
                     import pdb; pdb.set_trace() 
                 title_clean = row[0].lstrip().strip()
@@ -35,7 +37,7 @@ def main(infile, outfile):
                 body = body.split('\n')
                 body = [x.lstrip() for x in body]
                 body = [x.strip() for x in body if x.strip()]
-                body = [' '.join(x.split()) for x in body]  
+                body = [' '.join(x.split()) for x in body if x != '' and x != 'i']  
                 body = "\n\n".join(body)
                 a.writerow([row[0], row[1], row[2], body, row[4]])
 
