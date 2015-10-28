@@ -48,7 +48,27 @@ def main(infile, outfile):
                 body = "\n\n".join(body)
                 a.writerow([row[0], row[1], row[2], body, row[4]])
 
+    """
+    titles = []
+    json = []
+    for r in rows:
+        title = r[0]
+        if process.extractOne(title, titles):
+            if process.extractOne(title, titles)[1] > 90:
+                print 'skip:', title
+                continue
+        print 'add:', title
+        titles.append(title)
 
+        json.append({'title': r[0], 'url': r[1], \
+                'time': datetime.datetime.strftime(gmt_to_est(r[2]), '%I:%M %p'), \
+                'datetime': datetime.datetime.strftime(r[2], '%Y-%m-%dT%H:%M:%S'), \
+                'org': r[3], \
+                'desc': sent_detector.tokenize(BeautifulSoup(r[4]).get_text())[0] \
+                    if sent_detector.tokenize(BeautifulSoup(r[4]).get_text()) \
+                    else ""})
 
+    """
+    
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])

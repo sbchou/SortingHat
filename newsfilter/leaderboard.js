@@ -4,6 +4,8 @@
 Articles = new Mongo.Collection("articles");
 Labels = new Mongo.Collection("labels");
 
+
+
 if (Meteor.isClient) { 
   var width = $(window).width() - 25; 
   $("#outer").width(width);
@@ -11,7 +13,31 @@ if (Meteor.isClient) {
 
   Meteor.subscribe('theArticles');
   Meteor.subscribe('theLabels');
- 
+
+  globalHotkeys = new Hotkeys();
+
+  // LEFT KEY MEANS NO NO MEANS NO
+  globalHotkeys.add({
+    combo : "left",
+    callback : function () {
+      $('.no').css("background-color", "#4099FF");
+      $('.no').css("color", "#fff");
+      setTimeout( function (){  
+        $('.no').trigger('click'); 
+      }, 300);
+    }
+  })
+
+  globalHotkeys.add({
+    combo : "right",
+    callback : function () {
+      $('.yes').css("background-color", "#4099FF");
+      $('.yes').css("color", "#fff");
+      setTimeout( function (){  
+        $('.yes').trigger('click'); 
+      }, 300);
+    }
+  })
 
   Template.leaderboard.helpers({
 
@@ -116,7 +142,7 @@ if (Meteor.isClient) {
 
       article_title = Articles.find( {_id:Session.get("selectedArticle")}).map(function(x) { return x.title;});
 
-      console.log(article_title);
+      //console.log(article_title);
 
       article_conf = Articles.find( {_id:Session.get("selectedArticle")}, {fields: {'confidence': 1}}).map(function(x) {return x.confidence;});
 
