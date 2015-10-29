@@ -91,17 +91,24 @@ if (Meteor.isClient) {
     },
 
     //results for user!
+    // show last 10
+    // demo week where round = 10
     results: function(){ 
-      return Labels.find({'user_id': Meteor.userId()}, 
-        {$sort: { timestamp: -1 }});
+      var labels = Labels.find({'user_id': Meteor.userId()}, 
+        {$sort: { timestamp: -1 }, skip:0, limit: 10}); 
+      return labels;
     },
 
     //machine confidences
+    //show last 10
+    // demo week where round = 10
     machineResults: function(){  
-      var values = Labels.find({'user_id': Meteor.userId()}, {fields : {'article_conf':1}}, {$sort: { timestamp: -1 }}).map(function(x) { return x.article_conf;});
+      var values = Labels.find({'user_id': Meteor.userId()}, {fields : {'article_conf':1}}, {$sort: { timestamp: -1 }, skip:0, limit: 10}).map(function(x) { return x.article_conf;});
+ 
       // can't do list comprehensions
       var bools = []
-      for (var i = 0; i < values.length; i++) {
+      // map function still returns all, so i cut it here
+      for (var i = 0; i < 10; i++) {
            bools.push(values[i] > 50);
       } 
       return bools;

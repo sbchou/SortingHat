@@ -106,12 +106,12 @@ body {
 .article .description {
   white-space: pre-wrap; /* preserve them whitespacies!!!*/
   display: inline-block;
-  font-size: 1.25em;
+  font-size: 1.50em;
   font-weight: 300;
   vertical-align: middle;
   padding: 10px;
   overflow: scroll;
-  height: 70%;
+  height: 100%;
 } 
 
 .article .result {
@@ -130,7 +130,7 @@ body {
   border-left: #4099FF 4px solid; 
   border-right: #4099FF 4px solid; 
   /*float: left;*/
-  height: 400px; /*for now*/
+  height: 900px; /*for now*/
 }
 
 /*
