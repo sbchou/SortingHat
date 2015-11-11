@@ -16,10 +16,37 @@ def main(infile, chunksize):
                     wr.writerows(pusheen[i:i+chunksize])
 
                 elif i + 20 <= len(pusheen):
-                    wr.writerow(['title','url','org','body','election_news_confidence'])
+                    wr.writerow(['body',
+                                 'byline',
+                                 'description',
+                                 'title',
+                                 'url',
+                                 'topics',
+                                 'people',
+                                 'org',
+                                 'election_confidence',
+                                 'authors',
+                                 'date_written',
+                                 'orgs',
+                                 'article_id',
+                                 'date_access'])
                     wr.writerows(pusheen[i:i+chunksize])
                 else: 
-                    wr.writerow(['title','url','org','body','election_news_confidence'])
+                    
+                    wr.writerow(['body',
+                                 'byline',
+                                 'description',
+                                 'title',
+                                 'url',
+                                 'topics',
+                                 'people',
+                                 'org',
+                                 'election_confidence',
+                                 'authors',
+                                 'date_written',
+                                 'orgs',
+                                 'article_id',
+                                 'date_access'])
                     wr.writerows(pusheen[i:])
  
 if __name__ == "__main__":

@@ -24,7 +24,7 @@ if (Meteor.isClient) {
       $('.no').css("color", "#fff");
       setTimeout( function (){  
         $('.no').trigger('click'); 
-      }, 300);
+      }, 200);
     }
   })
 
@@ -35,7 +35,7 @@ if (Meteor.isClient) {
       $('.yes').css("color", "#fff");
       setTimeout( function (){  
         $('.yes').trigger('click'); 
-      }, 300);
+      }, 200);
     }
   })
 

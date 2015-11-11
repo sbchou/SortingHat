@@ -1,5 +1,6 @@
 import sys
 import csv
+import random
 
 def dedupe(ls):
     seen = set()
@@ -14,22 +15,26 @@ def main(infile, outfile):
         ####### issues with weird a######
 
         with open(infile) as csvfile:
-            spamrider = csv.reader(csvfile)
-            for row in spamrider:
-                print "TITTLES", titles
-                print 'THIS', row[0].lstrip().strip()
+            spamreader = csv.reader(csvfile)
+            spamreader = list(spamreader)
+            a.writerow(spamreader[0])
+            spamreader = spamreader[1:]
+            random.shuffle(spamreader)
+            for row in spamreader:
+                #print "TITTLES", titles
+                #print 'THIS', row[0].lstrip().strip()
                 if len(row) < 4:
-                    import pdb; pdb.set_trace() 
-                title_clean = row[0].lstrip().strip().replace('&#8217;', "\'").replace('mln', 'million')
+                    continue
+                title_clean = row[3].lstrip().strip().replace('&#8217;', "\'").replace('mln', 'million')
                 if title_clean in titles:
                     print 'seen title', title_clean
                     continue
-                if row[3] == '':
+                if row[0] == '':
                     continue
                 
                 titles.append(title_clean)
-                print 'unseen title', title_clean
-                body = row[3] 
+                #print 'unseen title', title_clean
+                body = row[0] 
                 if 'mbox' in body:
                     print 'MBOX', title_clean
                     continue
@@ -38,15 +43,16 @@ def main(infile, outfile):
                     continue
 
                 body = body.replace('itoggle caption', '').replace('hide caption', '')
-                body = body.replace('&#8217;', "\'")
+                body = body.replace('&#8217;', "\'") 
                 body = body.split('\n')
                 body = [x.lstrip() for x in body]
                 body = [x.strip() for x in body if x.strip()]
+                body = [x.decode('utf-8') for x in body ]
                 body = dedupe(body)
 
                 body = [' '.join(x.split()) for x in body if x != '' and x != 'i']  
                 body = "\n\n".join(body)
-                a.writerow([row[0], row[1], row[2], body, row[4]])
+                a.writerow(row)
 
     """
     titles = []
