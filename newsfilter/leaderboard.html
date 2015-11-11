@@ -5,7 +5,7 @@
 </head>
 
 <body>
-
+  <script> </script>
      
   <div class="outer">
     {{> loginButtons}}
@@ -51,9 +51,10 @@
       <center>
         <h1>You're all done!</h1>
 
-        <!--<p>You classified {{numTrue}} articles as U.S. Election related, and {{numFalse}} articles as unrelated.</p>-->
+        <p>You classified {{numTrue}} articles as U.S. Election related, and {{numFalse}} articles as unrelated.</p> 
 
-        <h2><p>Summary:</p></h2>
+        <!--<h2><p>Summary:</p></h2>-->
+         
         <p>Was this article about the election?</p>
 
         Your answer: 
@@ -71,7 +72,7 @@
             <input type="checkbox" disabled="disabled">  
           {{/if}}
         {{/each}}       
-
+         
         <h2><p>All articles:</p></h2>
 
          {{#each results}}
@@ -106,11 +107,9 @@
 </template>
  
 <template name="article">
-  <ul class="article {{selected}}">  
-     
-    <!--<span class="score">{{r}}</span>  -->
+  <ul class="article {{selected}}">    
     <span class="name">{{title}}</span> 
-    <span class="description">{{body}}</span>
+    <span class="description">{{{body}}}</span> 
   </ul>
 </template>
 

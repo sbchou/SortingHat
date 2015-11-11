@@ -94,8 +94,10 @@ if (Meteor.isClient) {
     // show last 10
     // demo week where round = 10
     results: function(){ 
-      var labels = Labels.find({'user_id': Meteor.userId()}, 
-        {$sort: { timestamp: -1 }, skip:0, limit: 10}); 
+
+      //var labels = Labels.find({'user_id': Meteor.userId()}, 
+      //  {$sort: { timestamp: -1 }, skip:0, limit: 10}); 
+      var labels = Labels.find({'user_id': Meteor.userId()}); 
       return labels;
     },
 
@@ -103,12 +105,13 @@ if (Meteor.isClient) {
     //show last 10
     // demo week where round = 10
     machineResults: function(){  
-      var values = Labels.find({'user_id': Meteor.userId()}, {fields : {'article_conf':1}}, {$sort: { timestamp: -1 }, skip:0, limit: 10}).map(function(x) { return x.article_conf;});
+      //var values = Labels.find({'user_id': Meteor.userId()}, {fields : {'article_conf':1}}, {$sort: { timestamp: -1 }, skip:0, limit: 10}).map(function(x) { return x.article_conf;});
+      var values = Labels.find({'user_id': Meteor.userId()}, {fields : {'article_conf':1}}).map(function(x) { return x.article_conf;});
  
       // can't do list comprehensions
       var bools = []
       // map function still returns all, so i cut it here
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < values.length; i++) {
            bools.push(values[i] > 50);
       } 
       return bools;
@@ -134,8 +137,24 @@ if (Meteor.isClient) {
             _.each(all, function (entry) {
               entry.label_ids = []; // add labels array
               entry.user_ids = [];
-              entry.confidence = Math.floor(parseFloat(entry.election_news_confidence) * 100);
+              entry.confidence = Math.floor(parseFloat(entry.election_confidence) * 100);
+              //entry.people = JSON.parse(entry.people);
+              entry.people = JSON.parse(entry.people.replace(/u'/g, "'").replace(/'/g, "\""));
+              
+              var queries = entry.people; 
+              var body = entry.body;
+              for (i = 0; i < queries.length; i++){
+                var names = queries[i].split(" ");
+                for (j = 0; j < names.length; j++){
+                  var re = new RegExp(names[j],"g");
+                  body = body.replace(re, '<b>'+ names[j] +'</b>');
+                }
+              }  
+              entry.body = body;
+              console.log(entry.body);
+               
               Articles.insert(entry);
+
             });
           }
           reader.readAsText(file);
@@ -146,15 +165,8 @@ if (Meteor.isClient) {
     'click .yes': function () {
 
       id = Date.now().toString().substr(4);
-
       article_title = Articles.find( {_id:Session.get("selectedArticle")}).map(function(x) { return x.title;});
-
-      //console.log(article_title);
-
-      article_conf = Articles.find( {_id:Session.get("selectedArticle")}, {fields: {'confidence': 1}}).map(function(x) {return x.confidence;});
-
-      console.log(article_conf);
-      
+      article_conf = Articles.find( {_id:Session.get("selectedArticle")}, {fields: {'confidence': 1}}).map(function(x) {return x.confidence;}); 
  
       Labels.insert({
         _id : id,

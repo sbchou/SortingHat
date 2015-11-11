@@ -20,6 +20,8 @@ body {
   padding: 0;
 }
 
+.highlight { color: red}
+
 .outer {
   margin: 0 auto;
   /*max-width: 480px;*/
