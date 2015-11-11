@@ -140,18 +140,24 @@ if (Meteor.isClient) {
               entry.confidence = Math.floor(parseFloat(entry.election_confidence) * 100);
               //entry.people = JSON.parse(entry.people);
               entry.people = JSON.parse(entry.people.replace(/u'/g, "'").replace(/'/g, "\""));
-              
-              var queries = entry.people; 
+              entry.orgs = JSON.parse(entry.orgs.replace(/u'/g, "'").replace(/'/g, "\""));
+
               var body = entry.body;
-              for (i = 0; i < queries.length; i++){
-                var names = queries[i].split(" ");
+              var people = entry.people; 
+              for (i = 0; i < people.length; i++){
+                var names = people[i].split(" ");
                 for (j = 0; j < names.length; j++){
                   var re = new RegExp(names[j],"g");
                   body = body.replace(re, '<b>'+ names[j] +'</b>');
                 }
               }  
-              entry.body = body;
-              console.log(entry.body);
+
+              var orgs = entry.orgs; 
+              for (i = 0; i < orgs.length; i++){  
+                var re = new RegExp(orgs[i], "g");
+                body = body.replace(re, '<b>' + orgs[i] + '</b>'); 
+              }  
+              entry.body = body; 
                
               Articles.insert(entry);
 
