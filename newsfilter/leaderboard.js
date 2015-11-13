@@ -142,20 +142,20 @@ if (Meteor.isClient) {
               entry.people = JSON.parse(entry.people.replace(/u'/g, "'").replace(/'/g, "\""));
               entry.orgs = JSON.parse(entry.orgs.replace(/u'/g, "'").replace(/'/g, "\""));
 
-              var body = entry.body;
+              var body = entry.body.trim();
               var people = entry.people; 
               for (i = 0; i < people.length; i++){
                 var names = people[i].split(" ");
                 for (j = 0; j < names.length; j++){
                   var re = new RegExp(names[j],"g");
-                  body = body.replace(re, '<b>'+ names[j] +'</b>');
+                  body = body.replace(re, '<b><font color="blue">'+ names[j] +'</font></b>');
                 }
               }  
 
               var orgs = entry.orgs; 
               for (i = 0; i < orgs.length; i++){  
                 var re = new RegExp(orgs[i], "g");
-                body = body.replace(re, '<b>' + orgs[i] + '</b>'); 
+                body = body.replace(re, '<b><font color="green">' + orgs[i] + '</font></b>'); 
               }  
               entry.body = body; 
                

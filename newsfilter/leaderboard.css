@@ -25,7 +25,7 @@ body {
 .outer {
   margin: 0 auto;
   /*max-width: 480px;*/
-  max-width: 50%
+  max-width: 80%
 }
 
 .logo {
@@ -60,7 +60,7 @@ body {
   /*counter-reset: ol-counter;*/
   list-style-type: none;
   margin: 0 0 1.5em;
-  padding: 0;
+  padding: 0; 
 }
 
 .article {
@@ -71,6 +71,7 @@ body {
   overflow: hidden;
   transition: background 300ms ease-out;
   border-left: 4px solid white;
+  border-radius: 10px;
 }
 
 .article:before {
@@ -111,7 +112,7 @@ body {
   font-size: 1.50em;
   font-weight: 300;
   vertical-align: middle;
-  padding: 10px;
+  padding: 15px;
   overflow: scroll;
   height: 100%;
 } 
@@ -129,8 +130,10 @@ body {
 .article.selected {
   /*background-color: #fefff4;*/
   background-color: rgba(0,0,0,0.05);
+  /*
   border-left: #4099FF 4px solid; 
   border-right: #4099FF 4px solid; 
+  */
   /*float: left;*/
   height: 900px; /*for now*/
 }
