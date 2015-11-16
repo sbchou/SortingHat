@@ -137,14 +137,20 @@ if (Meteor.isClient) {
             _.each(all, function (entry) {
               entry.label_ids = []; // add labels array
               entry.user_ids = [];
-              entry.confidence = Math.floor(parseFloat(entry.election_confidence) * 100);
-              //entry.people = JSON.parse(entry.people);
-               entry.people = JSON.parse(entry.people.replace(/u'/g, "'").replace(/'/g, "\""));
+              entry.confidence = Math.floor(parseFloat(entry.election_confidence) * 100); 
+               //FUCKING DOUBLE QUOTES FOR JSON
               
-               entry.orgs = JSON.parse(entry.orgs.replace(/u'/g, "'").replace(/'/g, "\"")); 
+              entry.people = entry.people.replace(/'/g, "\"");
+              entry.people = entry.people.replace("O\"Malley", "O'Malley")
+              console.log(entry.people)
+              entry.people = JSON.parse(entry.people); 
+
+
+              
+              entry.orgs = JSON.parse(entry.orgs.replace(/'/g, "\"")); 
 
               var body = entry.body.trim();
-              var people = entry.people; 
+              var people = entry.people;  
               for (i = 0; i < people.length; i++){
                 var names = people[i].split(" ");
                 for (j = 0; j < names.length; j++){
@@ -240,6 +246,41 @@ if (Meteor.isClient) {
 
 // On server startup, create some articles if the database is empty
 if (Meteor.isServer) {
+     if (Articles.find().count() === 0) {
+          console.log("Importing private/products.json to db")
+
+          var data = JSON.parse(Assets.getText("16-11-2015-all.json"));
+
+          data.forEach(function (item, index, array) { 
+              item.label_ids = []; // add labels array
+              item.user_ids = [];
+              item.confidence = Math.floor(parseFloat(item.election_confidence) * 100); 
+              //FUCKING DOUBLE QUOTES FOR JSON
+              
+             
+              console.log(item.people)
+              
+              var body = item.body.trim();
+              var people = item.people;  
+              for (i = 0; i < people.length; i++){
+                var names = people[i].split(" ");
+                for (j = 0; j < names.length; j++){
+                  var re = new RegExp(names[j],"g");
+                  body = body.replace(re, '<b><font color="blue">'+ names[j] +'</font></b>');
+                }
+              }  
+
+              var orgs = item.orgs; 
+              for (i = 0; i < orgs.length; i++){  
+                var re = new RegExp(orgs[i], "g");
+                body = body.replace(re, '<b><font color="green">' + orgs[i] + '</font></b>'); 
+              }  
+              item.body = body; 
+               
+              Articles.insert(item);
+
+          })
+      }
 
     Meteor.publish('theArticles', function(){
       var currentUserId = this.userId;

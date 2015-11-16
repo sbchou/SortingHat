@@ -17,6 +17,7 @@ def main(infile, outfile):
         with open(infile) as csvfile:
             csvfile = csvfile.read()
             csvfile = csvfile.replace("u'", "'")
+            csvfile = csvfile.replace("u\"", "'") 
             spamreader = csv.reader(csvfile.splitlines())
             spamreader = list(spamreader)
             a.writerow(spamreader[0])

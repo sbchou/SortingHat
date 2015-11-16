@@ -110,6 +110,7 @@
 <template name="article">
   <ul class="article {{selected}}">    
     <span class="name">{{title}}</span> 
+    <span class="name">{{orgs}}</span>
     <span class="description">{{{body}}}</span> 
   </ul>
 </template>
@@ -134,11 +135,5 @@
     <span class="result">Sorting hat is {{article_conf}}% sure this is about the Election </span>   
      
   </ul>
-</template>
-
-<template name="export">
-  <h3>Export</h3>
-  <p>To export your data, click the button below.</p>
-  <button class="export-data btn btn-success" data-loading-text="Exporting...">Export Data</button>
 </template>
  
