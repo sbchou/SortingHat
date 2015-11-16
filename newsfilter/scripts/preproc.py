@@ -15,7 +15,9 @@ def main(infile, outfile):
         ####### issues with weird a######
 
         with open(infile) as csvfile:
-            spamreader = csv.reader(csvfile)
+            csvfile = csvfile.read()
+            csvfile = csvfile.replace("u'", "'")
+            spamreader = csv.reader(csvfile.splitlines())
             spamreader = list(spamreader)
             a.writerow(spamreader[0])
             spamreader = spamreader[1:]

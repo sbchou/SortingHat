@@ -139,8 +139,9 @@ if (Meteor.isClient) {
               entry.user_ids = [];
               entry.confidence = Math.floor(parseFloat(entry.election_confidence) * 100);
               //entry.people = JSON.parse(entry.people);
-              entry.people = JSON.parse(entry.people.replace(/u'/g, "'").replace(/'/g, "\""));
-              entry.orgs = JSON.parse(entry.orgs.replace(/u'/g, "'").replace(/'/g, "\""));
+               entry.people = JSON.parse(entry.people.replace(/u'/g, "'").replace(/'/g, "\""));
+              
+               entry.orgs = JSON.parse(entry.orgs.replace(/u'/g, "'").replace(/'/g, "\"")); 
 
               var body = entry.body.trim();
               var people = entry.people; 

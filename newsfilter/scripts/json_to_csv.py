@@ -11,39 +11,50 @@ def byteify(input):
     else:
         return input
 
-x = json.load(open('../data/05-11-2015/2015-11-05.json', 'r'))
-f = unicodecsv.writer(open("../data/05-11-2015/2015-11-05.csv", "wb+"), encoding='utf-8')
+def main(inf, outf):
+    # add opening, closing parens and remove trailing comma
+    x = open(inf, 'r')
+    inf = x.read()
+    inf = "[" + inf
+    inf = if[:-2] + "]"
+    x = json.load(open(inf, 'r'))
 
-f.writerow(['body',
- 'byline',
- 'description',
- 'title',
- 'url',
- 'topics',
- 'people',
- 'org',
- 'election_confidence',
- 'authors',
- 'date_written',
- 'orgs',
- 'article_id',
- 'date_access'])
-for entry in x:
-    f.writerow(entry.values())
-    """
-    f.writerow([entry['body'],
-        entry['byline'],
-        entry['description'],
-        entry['title'],
-        entry['url'],
-        [x.encode('UTF8') for x in entry['topics']],
-        [x.encode('UTF8') for x in entry['people']],
-        entry['org'],
-        entry['election_confidence'],
-        entry['authors'], #this is a json of info fix later
-        entry['date_written'],
-        [x.encode('UTF8') for x in entry['orgs']],
-        entry['article_id'],
-        entry['date_access']])
-    """
- 
+
+    f = unicodecsv.writer(open(outf, "wb+"), encoding='utf-8')
+
+    f.writerow(['body',
+     'byline',
+     'description',
+     'title',
+     'url',
+     'topics',
+     'people',
+     'org',
+     'election_confidence',
+     'authors',
+     'date_written',
+     'orgs',
+     'article_id',
+     'date_access'])
+    for entry in x:
+        f.writerow(entry.values())
+        """
+        f.writerow([entry['body'],
+            entry['byline'],
+            entry['description'],
+            entry['title'],
+            entry['url'],
+            [x.encode('UTF8') for x in entry['topics']],
+            [x.encode('UTF8') for x in entry['people']],
+            entry['org'],
+            entry['election_confidence'],
+            entry['authors'], #this is a json of info fix later
+            entry['date_written'],
+            [x.encode('UTF8') for x in entry['orgs']],
+            entry['article_id'],
+            entry['date_access']])
+        """
+
+    
+if __name__ == "__main__":
+    main(sys.argv[1], sys.argv[2])

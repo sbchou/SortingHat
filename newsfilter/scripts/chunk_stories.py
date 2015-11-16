@@ -5,8 +5,7 @@ import csv
 import sys
  
  # TODO: CHANGE OUTPUT TO THE CORRECT DIRECTORY
-def main(infile, chunksize):
-    TODAY = '13-11-2015'
+def main(infile, chunksize, TODAY): 
     chunksize = int(chunksize)
     with open(infile) as csvfile:
         spamrider = csv.reader(csvfile)
@@ -52,4 +51,4 @@ def main(infile, chunksize):
                     wr.writerows(pusheen[i:])
  
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1], sys.argv[2], sys.argv[3])
