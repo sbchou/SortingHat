@@ -32,12 +32,13 @@
     </div> 
 
     <!-- Admin always has opp to insert more. -->
+    <!--
     {{#if isAdmin}}
         <bold>Admin</bold>: do you want to add more entries?
         <input type="file" id="files" name="files[]" multiple />
         <output id="list"></output> 
     {{/if}}
-
+    -->
 
     {{#if noEntries}}
       <center>
@@ -109,8 +110,7 @@
  
 <template name="article">
   <ul class="article {{selected}}">    
-    <span class="name">{{title}}</span> 
-    <span class="name">{{orgs}}</span>
+    <span class="name">{{title}}</span>  
     <span class="description">{{{body}}}</span> 
   </ul>
 </template>

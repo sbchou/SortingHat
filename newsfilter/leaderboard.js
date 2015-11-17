@@ -276,15 +276,14 @@ if (Meteor.isServer) {
                 body = body.replace(re, '<b><font color="green">' + orgs[i] + '</font></b>'); 
               }  
               item.body = body; 
-               
               Articles.insert(item);
-
           })
       }
 
     Meteor.publish('theArticles', function(){
-      var currentUserId = this.userId;
-      return Articles.find({});
+      var currentUserId = this.userId; 
+      //return Articles.find({}); 
+      return Articles.find({'user_id':{$ne : currentUserId}, body:{$ne:''}}, {skip:0, limit: 20}); 
     });
 
     Meteor.publish('theLabels', function(){
