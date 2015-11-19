@@ -90,9 +90,34 @@ if (Meteor.isClient) {
       return Labels.find({'user_id':Meteor.userId(), user_label : 0}).count();
     },
 
-    //results for user!
-    // show last 10
-    // demo week where round = 10
+    numMachineTrue: function(){
+      return Labels.find({'user_id':Meteor.userId(), article_conf : {$gt: 50}}).count();
+    },
+
+
+    numMachineFalse: function(){
+      return Labels.find({'user_id':Meteor.userId(), article_conf : {$lt: 50}}).count();
+    },
+
+    falseNegCount: function(){
+      return Labels.find({'user_id':Meteor.userId(), article_conf : {$lt: 50}, user_label: 1}).count();
+    },
+
+    falsePosCount: function(){
+      return Labels.find({'user_id':Meteor.userId(), article_conf : {$gt: 50}, user_label: 0}).count();
+    },
+
+
+    falseNeg: function(){
+      return Labels.find({'user_id':Meteor.userId(), article_conf : {$lt: 50}, user_label: 1});
+    },
+
+    falsePos: function(){
+      return Labels.find({'user_id':Meteor.userId(), article_conf : {$gt: 50}, user_label: 0});
+    },
+
+    
+    //all of your answers
     results: function(){ 
 
       //var labels = Labels.find({'user_id': Meteor.userId()}, 
@@ -101,9 +126,7 @@ if (Meteor.isClient) {
       return labels;
     },
 
-    //machine confidences
-    //show last 10
-    // demo week where round = 10
+    //all of sorting hat's answers
     machineResults: function(){  
       //var values = Labels.find({'user_id': Meteor.userId()}, {fields : {'article_conf':1}}, {$sort: { timestamp: -1 }, skip:0, limit: 10}).map(function(x) { return x.article_conf;});
       var values = Labels.find({'user_id': Meteor.userId()}, {fields : {'article_conf':1}}).map(function(x) { return x.article_conf;});
@@ -116,10 +139,7 @@ if (Meteor.isClient) {
       } 
       return bools;
     }
-
-
-
-  
+ 
 
   });
 
@@ -135,7 +155,8 @@ if (Meteor.isClient) {
             var text = e.target.result;  
             var all = $.csv.toObjects(text);  
             _.each(all, function (entry) {
-              entry.label_ids = []; // add labels array
+              entry.label_ids = []; // references to labels
+              entry.labels = []; // add labels array
               entry.user_ids = [];
               entry.confidence = Math.floor(parseFloat(entry.election_confidence) * 100); 
                //FUCKING DOUBLE QUOTES FOR JSON
@@ -194,7 +215,7 @@ if (Meteor.isClient) {
 
       //add this user and this label to the article
       Articles.update(Session.get("selectedArticle"),
-       {$push: {'label_ids': id, 'user_ids': Meteor.userId()}
+       {$push: {'label_ids': id, 'labels': 1, 'user_ids': Meteor.userId()}
       });
 
       $("#leaderboard").load(location.href + " #leaderboard");
@@ -227,7 +248,7 @@ if (Meteor.isClient) {
 
       //add this user and this label to the article
       Articles.update(Session.get("selectedArticle"),
-       {$push: {'label_ids': id, 'user_ids': Meteor.userId()}
+       {$push: {'label_ids': id, labels: 0, 'user_ids': Meteor.userId()}
       });
 
       $("#leaderboard").load(location.href + " #leaderboard");
@@ -239,25 +260,20 @@ if (Meteor.isClient) {
       return Session.equals("selectedArticle", this._id) ? "selected" : '';
     }
   });  
-   
  }
-
- 
 
 // On server startup, create some articles if the database is empty
 if (Meteor.isServer) {
      if (Articles.find().count() === 0) {
           console.log("Importing private/products.json to db")
-
-          var data = JSON.parse(Assets.getText("16-11-2015-all.json"));
+          //stop hardcode...
+          var data = JSON.parse(Assets.getText("20.json"));
 
           data.forEach(function (item, index, array) { 
               item.label_ids = []; // add labels array
               item.user_ids = [];
               item.confidence = Math.floor(parseFloat(item.election_confidence) * 100); 
               //FUCKING DOUBLE QUOTES FOR JSON
-              
-             
               console.log(item.people)
               
               var body = item.body.trim();

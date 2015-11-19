@@ -52,11 +52,19 @@
       <center>
         <h1>You're all done!</h1>
 
+        <h2>Overview</h2>
         <p>You classified {{numTrue}} articles as U.S. Election related, and {{numFalse}} articles as unrelated.</p> 
 
+
+        <p>Sorting Hat classified {{numMachineTrue}} articles as U.S. Election related, and {{numMachineFalse}} articles as unrelated.</p> 
+
+
+        <p>Machine False Positives: {{falsePosCount}}</p> 
+        <p>Machine False Negatives: {{falseNegCount}}</p> 
+
         <!--<h2><p>Summary:</p></h2>-->
-         
-        <p>Was this article about the election?</p>
+        <!--
+        <p>Summary</p>
 
         Your answer: 
         {{#each results}}
@@ -73,10 +81,15 @@
             <input type="checkbox" disabled="disabled">  
           {{/if}}
         {{/each}}       
-         
-        <h2><p>All articles:</p></h2>
+         -->
+        <h2>Disagreements</h2>
 
-         {{#each results}}
+         {{#each falsePos}}
+          {{> result}}
+        {{/each}}
+
+
+         {{#each falseNeg}}
           {{> result}}
         {{/each}}
        
@@ -105,12 +118,11 @@
     <h2>Can you teach Sorting Hat about the election? </h2> 
   </center>
   {{/if}}<!-- end if for logged-in-->
-
 </template>
  
 <template name="article">
   <ul class="article {{selected}}">    
-    <span class="name">{{title}}</span>  
+    <span class="name">{{{title}}}</span>  
     <span class="description">{{{body}}}</span> 
   </ul>
 </template>
@@ -124,9 +136,8 @@
 </template>
 
 <template name="result"> 
-
   <ul class="article {{selected}}">  
-    <span class="name">{{article_title}}</span>  
+    <span class="name">{{{article_title}}}</span>  
     {{#if user_label}}
       <span class="result">You said: Yes </span> 
     {{else}}
