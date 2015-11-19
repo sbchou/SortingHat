@@ -1,6 +1,6 @@
 # in root
-TODAY=$(date +"%d-%m-%Y");
-mkdir data/$TODAY
+TODAY=$(date +"%d-%m-%Y") &&
+mkdir data/$TODAY &&
 scp -r soph@cat3:/home/users/pralav/electome_latest/electome/data/outputs/dump/recent_dumps/$TODAY data/$TODAY
 
 
