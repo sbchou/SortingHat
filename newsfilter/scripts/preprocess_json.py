@@ -1,6 +1,12 @@
 import glob
 import json
 import sys
+import math
+"""
+No more chunking!
+"""
+def flatten(ls):
+    return [item for sublist in ls for item in sublist] 
 
 def main(TODAY):
     files = glob.glob('data/' + TODAY + '/' + TODAY + '/*')
@@ -24,14 +30,29 @@ def main(TODAY):
             body = body.split("\n")
             body = "\n".join([p.strip() for p in body if p.strip()])
             d['body'] = body
-            cleaned_data.append(d)
 
-    CHUNKSIZE = 20
-    for i in xrange(0, len(cleaned_data), CHUNKSIZE):
-        json.dump(cleaned_data[i:i+CHUNKSIZE], open('data/' + TODAY + '/' + str(i) + '.json', 'w'))
+            # Highlight all the entities in the body of the article
+            people = d['people']
+            first_and_last = flatten([p.split(" ") for p in people])
+            
+            body_with_entities = body
+            for name in first_and_last:
+                body_with_entities = body_with_entities.replace(name, '<b><font color="blue">' + name + '</font></b>')
 
- 
-                
+            for org in d['orgs']:
+                body_with_entities = body_with_entities.replace(org, '<b><font color="green">' + org + '</font></b>')
 
+
+            d['body_with_entities'] = body_with_entities
+            
+            d['label_ids'] = []; #  add labels array
+            d['user_ids'] = [];
+            d['confidence'] = math.floor(float(d['election_confidence']) * 100); 
+
+            cleaned_data.append(d) 
+    print len(cleaned_data), "articles processed"
+    json.dump(cleaned_data, open('data/' + TODAY + '/' + TODAY +'-CLEAN.json', 'w'))
+
+  
 if __name__ == "__main__":
     main(sys.argv[1])
